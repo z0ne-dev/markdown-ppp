@@ -20,6 +20,7 @@
 
 /// Root of a Markdown document
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Document {
     /// Top‑level block sequence **in document order**.
     pub blocks: Vec<Block>,
@@ -31,6 +32,7 @@ pub struct Document {
 
 /// Block‑level constructs in the order they appear in the CommonMark spec.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Block {
     /// Ordinary paragraph
     Paragraph(Vec<Inline>),
@@ -68,6 +70,7 @@ pub enum Block {
 
 /// Heading with level 1–6 and inline content.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Heading {
     /// Heading level (1 ⇒ `<h1>`, …, 6 ⇒ `<h6>`).
     pub level: u8,
@@ -82,6 +85,7 @@ pub struct Heading {
 
 /// A list container — bullet or ordered.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct List {
     /// Kind of list together with additional semantic data (start index or
     /// bullet marker).
@@ -93,6 +97,7 @@ pub struct List {
 
 /// Specifies *what kind* of list we have.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum ListKind {
     /// Ordered list (`1.`, `42.` …) with an *optional* explicit start number.
     Ordered(ListOrderedKindOptions),
@@ -103,6 +108,7 @@ pub enum ListKind {
 
 /// Specifies *what kind* of list we have.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct ListOrderedKindOptions {
     /// Start index (1, 2, …) for ordered lists.
     pub start: u64,
@@ -110,6 +116,7 @@ pub struct ListOrderedKindOptions {
 
 /// Concrete bullet character used for a bullet list.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum ListBulletKind {
     /// `-` U+002D
     Dash,
@@ -123,6 +130,7 @@ pub enum ListBulletKind {
 
 /// Item within a list.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct ListItem {
     /// Task‑list checkbox state (GFM task‑lists). `None` ⇒ not a task list.
     pub task: Option<TaskState>,
@@ -133,6 +141,7 @@ pub struct ListItem {
 
 /// State of a task‑list checkbox.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum TaskState {
     /// Unchecked (GFM task‑list item)
     Incomplete,
@@ -147,6 +156,7 @@ pub enum TaskState {
 
 /// Fenced or indented code block.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct CodeBlock {
     /// Distinguishes indented vs fenced code and stores the *info string*.
     pub kind: CodeBlockKind,
@@ -157,6 +167,7 @@ pub struct CodeBlock {
 
 /// The concrete kind of a code block.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum CodeBlockKind {
     /// Indented block (≥ 4 spaces or 1 tab per line).
     Indented,
@@ -171,6 +182,7 @@ pub enum CodeBlockKind {
 
 /// Link reference definition (GFM) with a label, destination and optional title.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct LinkDefinition {
     /// Normalized label (acts as the *identifier*).
     pub label: String,
@@ -189,6 +201,7 @@ pub struct LinkDefinition {
 /// A table is a collection of rows and columns with optional alignment.
 /// The first row is the header row.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Table {
     /// Each row is a vector of *cells*; header row is **row 0**.
     pub rows: Vec<TableRow>,
@@ -205,6 +218,7 @@ pub type TableCell = Vec<Inline>;
 
 /// Specifies the alignment of a table cell.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Alignment {
     /// No alignment specified
     None,
@@ -224,6 +238,7 @@ pub enum Alignment {
 // ——————————————————————————————————————————————————————————————————————————
 
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct FootnoteDefinition {
     /// Normalized label (without leading `^`).
     pub label: String,
@@ -237,6 +252,7 @@ pub struct FootnoteDefinition {
 // ——————————————————————————————————————————————————————————————————————————
 
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Inline {
     /// Plain text (decoded entity references, preserved backslash escapes).
     Text(String),
@@ -278,6 +294,7 @@ pub enum Inline {
 
 /// Re‑usable structure for links and images (destination + children).
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Link {
     /// Destination URL (absolute or relative) or email address.
     pub destination: String,
@@ -290,6 +307,7 @@ pub struct Link {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct LinkReference {
     /// Normalized label (acts as the *identifier*).
     pub label: String,
