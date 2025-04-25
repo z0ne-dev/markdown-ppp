@@ -1,13 +1,13 @@
 use crate::ast::Block;
 use crate::parser::util::*;
 use crate::parser::MarkdownParserState;
-use alloc::{rc::Rc, vec::Vec};
 use nom::{
     character::complete::char,
     multi::{many1, many_m_n, separated_list1},
     sequence::preceded,
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn blockquote<'a>(
     state: Rc<MarkdownParserState>,

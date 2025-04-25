@@ -1,8 +1,8 @@
 use crate::ast::{Inline, LinkReference};
 use crate::parser::link_util::link_label;
 use crate::parser::MarkdownParserState;
-use alloc::rc::Rc;
 use nom::{branch::alt, bytes::complete::tag, sequence::terminated, IResult, Parser};
+use std::rc::Rc;
 
 pub(crate) fn reference_link<'a>(
     state: Rc<MarkdownParserState>,

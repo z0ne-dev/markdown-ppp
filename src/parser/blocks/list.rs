@@ -1,7 +1,6 @@
 use crate::ast::{ListBulletKind, ListItem, ListKind, ListOrderedKindOptions, TaskState};
 use crate::parser::util::*;
 use crate::parser::MarkdownParserState;
-use alloc::{rc::Rc, vec::Vec};
 use nom::{
     branch::alt,
     character::complete::{char, one_of, space0},
@@ -10,6 +9,7 @@ use nom::{
     sequence::{delimited, preceded, terminated},
     IResult, Parser,
 };
+use std::rc::Rc;
 
 fn list_item_task_state(input: &str) -> IResult<&str, TaskState> {
     delimited(

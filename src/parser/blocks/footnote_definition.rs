@@ -1,8 +1,6 @@
 use crate::ast::FootnoteDefinition;
 use crate::parser::util::{line_terminated, not_eof_or_eol1};
 use crate::parser::MarkdownParserState;
-use alloc::borrow::ToOwned;
-use alloc::rc::Rc;
 use nom::character::complete::{char, none_of};
 use nom::{
     bytes::complete::tag,
@@ -11,6 +9,7 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn footnote_definition<'a>(
     state: Rc<MarkdownParserState>,

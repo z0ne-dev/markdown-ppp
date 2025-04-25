@@ -1,6 +1,4 @@
 use crate::parser::MarkdownParserState;
-use alloc::rc::Rc;
-use alloc::string::ToString;
 use nom::{
     branch::alt,
     bytes::complete::tag,
@@ -9,6 +7,7 @@ use nom::{
     sequence::{delimited, preceded},
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn html_entity(
     state: Rc<MarkdownParserState>,

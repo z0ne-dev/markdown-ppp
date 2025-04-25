@@ -15,10 +15,10 @@ mod tests;
 use crate::ast::Block;
 use crate::parser::util::*;
 use crate::parser::MarkdownParserState;
-use alloc::rc::Rc;
 use nom::branch::alt;
 use nom::combinator::fail;
 use nom::{combinator::map, sequence::preceded, IResult, Parser};
+use std::rc::Rc;
 
 pub(crate) fn block<'a>(
     state: Rc<MarkdownParserState>,

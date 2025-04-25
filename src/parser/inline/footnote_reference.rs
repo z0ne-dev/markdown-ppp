@@ -1,5 +1,4 @@
 use crate::ast::Inline;
-use alloc::borrow::ToOwned;
 use nom::{
     bytes::complete::tag,
     character::complete::{alphanumeric1, char},

@@ -1,5 +1,4 @@
 use crate::parser::MarkdownParserState;
-use alloc::rc::Rc;
 use nom::{
     branch::alt,
     bytes::complete::{tag, tag_no_case},
@@ -11,6 +10,7 @@ use nom::{
     sequence::{delimited, pair, preceded, terminated},
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn html_block(
     state: Rc<MarkdownParserState>,

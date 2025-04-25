@@ -1,7 +1,6 @@
 use super::eof_or_eol;
 use crate::ast::{Alignment, Inline, Table, TableRow};
 use crate::parser::MarkdownParserState;
-use alloc::{rc::Rc, vec::Vec};
 use nom::{
     branch::alt,
     bytes::complete::tag,
@@ -11,6 +10,7 @@ use nom::{
     sequence::{delimited, preceded, terminated},
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn table<'a>(
     state: Rc<MarkdownParserState>,

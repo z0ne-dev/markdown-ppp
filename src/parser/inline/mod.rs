@@ -15,14 +15,13 @@ mod tests;
 
 use crate::ast::Inline;
 use crate::parser::MarkdownParserState;
-use alloc::rc::Rc;
-use alloc::vec::Vec;
 use nom::{
     branch::alt,
     combinator::{fail, map},
     multi::{many0, many1},
     IResult, Parser,
 };
+use std::rc::Rc;
 
 use super::util::conditional_inline;
 

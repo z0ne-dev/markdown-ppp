@@ -1,6 +1,5 @@
 use crate::ast::Inline;
 use crate::parser::MarkdownParserState;
-use alloc::rc::Rc;
 use nom::{
     branch::alt,
     bytes::complete::tag,
@@ -10,6 +9,7 @@ use nom::{
     sequence::{preceded, terminated},
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn strikethrough<'a>(
     state: Rc<MarkdownParserState>,

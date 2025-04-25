@@ -1,7 +1,6 @@
 use crate::ast::{Block, Heading};
 use crate::parser::util::*;
 use crate::parser::MarkdownParserState;
-use alloc::rc::Rc;
 use nom::{
     branch::alt,
     character::complete::{char, space0, space1},
@@ -10,6 +9,7 @@ use nom::{
     sequence::{preceded, terminated},
     IResult, Parser,
 };
+use std::rc::Rc;
 
 /// Parse headings in format:
 ///      ### Header text

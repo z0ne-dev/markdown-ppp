@@ -1,8 +1,7 @@
-use alloc::rc::Rc;
-use core::cell::RefCell;
 use nom::IResult;
-// TODO use hashbrown::HashMap
+use std::cell::RefCell;
 use std::collections::HashMap;
+use std::rc::Rc;
 
 /// Function type for mapping elements.
 type ElementMapFn<ELT> = Rc<RefCell<Box<dyn FnMut(ELT) -> ELT>>>;

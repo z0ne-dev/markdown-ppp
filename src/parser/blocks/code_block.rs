@@ -1,8 +1,6 @@
 use crate::ast::{CodeBlock, CodeBlockKind};
 use crate::parser::util::*;
 use crate::parser::MarkdownParserState;
-use alloc::borrow::ToOwned;
-use alloc::rc::Rc;
 use nom::{
     branch::alt,
     bytes::complete::tag,
@@ -12,6 +10,7 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn code_block<'a>(
     state: Rc<MarkdownParserState>,

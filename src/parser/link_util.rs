@@ -1,4 +1,3 @@
-use alloc::string::ToString;
 use nom::character::complete::{anychar, char, none_of, one_of, satisfy};
 use nom::{
     branch::alt,

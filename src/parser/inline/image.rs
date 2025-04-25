@@ -1,7 +1,7 @@
 use crate::ast::Inline;
 use crate::parser::MarkdownParserState;
-use alloc::rc::Rc;
 use nom::{character::complete::char, sequence::preceded, IResult, Parser};
+use std::rc::Rc;
 
 pub(crate) fn image<'a>(
     state: Rc<MarkdownParserState>,

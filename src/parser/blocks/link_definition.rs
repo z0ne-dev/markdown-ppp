@@ -2,7 +2,6 @@ use super::eof_or_eol;
 use crate::ast::LinkDefinition;
 use crate::parser::link_util::{link_destination, link_label, link_title};
 use crate::parser::MarkdownParserState;
-use alloc::{rc::Rc, string::ToString};
 use nom::character::complete::{char, line_ending, space0, space1};
 use nom::{
     branch::alt,
@@ -11,6 +10,7 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn link_definition<'a>(
     _state: Rc<MarkdownParserState>,

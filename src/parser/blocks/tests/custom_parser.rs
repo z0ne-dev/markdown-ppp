@@ -1,8 +1,8 @@
 use crate::ast::*;
 use crate::parser::{parse_markdown, MarkdownParserState};
-use alloc::rc::Rc;
-use core::cell::RefCell;
 use nom::combinator::value;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 #[test]
 fn custom_parser1() {

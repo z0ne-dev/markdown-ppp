@@ -6,7 +6,6 @@ mod util;
 
 use crate::ast::Document;
 use crate::parser::config::MarkdownParserConfig;
-use alloc::rc::Rc;
 use nom::{
     branch::alt,
     character::complete::{line_ending, space1},
@@ -16,6 +15,7 @@ use nom::{
     sequence::terminated,
     Parser,
 };
+use std::rc::Rc;
 
 pub struct MarkdownParserState {
     pub config: Rc<MarkdownParserConfig>,

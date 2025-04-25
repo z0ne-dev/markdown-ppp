@@ -1,7 +1,6 @@
 use crate::ast::Inline;
 use crate::parser::util::*;
 use crate::parser::MarkdownParserState;
-use alloc::{rc::Rc, vec::Vec};
 use nom::{
     branch::alt,
     character::complete::{char, line_ending, space0},
@@ -10,6 +9,7 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn paragraph<'a>(
     state: Rc<MarkdownParserState>,

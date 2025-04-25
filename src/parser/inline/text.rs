@@ -1,6 +1,5 @@
 use crate::parser::MarkdownParserState;
 use crate::{ast::Inline, parser::util::conditional_inline_unit};
-use alloc::rc::Rc;
 use nom::{
     branch::alt,
     character::complete::{anychar, char, one_of},
@@ -9,6 +8,7 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn text<'a>(
     state: Rc<MarkdownParserState>,

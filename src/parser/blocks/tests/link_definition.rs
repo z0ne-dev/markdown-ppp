@@ -1,8 +1,8 @@
 use crate::ast::*;
 use crate::parser::config::{ElementBehavior, MarkdownParserConfig};
 use crate::parser::{parse_markdown, MarkdownParserState};
-use alloc::rc::Rc;
-use core::cell::RefCell;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 #[test]
 fn link_definition1() {

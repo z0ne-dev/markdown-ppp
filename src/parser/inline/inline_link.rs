@@ -1,13 +1,13 @@
 use crate::ast::Link;
 use crate::parser::link_util::{link_destination, link_label, link_title};
 use crate::parser::MarkdownParserState;
-use alloc::rc::Rc;
 use nom::{
     character::complete::{char, multispace0},
     combinator::opt,
     sequence::{delimited, preceded},
     IResult, Parser,
 };
+use std::rc::Rc;
 
 pub(crate) fn inline_link<'a>(
     state: Rc<MarkdownParserState>,
