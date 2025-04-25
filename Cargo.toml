@@ -1,0 +1,9 @@
+[package]
+name = "markdown-ppp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+entities = "1.0.1"
+nom = { version = "8.0.0", default-features = false, features = ["alloc"] }
+unicode_categories = "0.1.1"
