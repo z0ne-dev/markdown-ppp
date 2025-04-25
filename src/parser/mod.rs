@@ -10,7 +10,6 @@ use nom::{
     branch::alt,
     character::complete::{line_ending, space1},
     combinator::eof,
-    error::make_error,
     multi::many0,
     sequence::terminated,
     Parser,
@@ -43,19 +42,9 @@ pub fn parse_markdown(
     let empty_lines = many0(alt((space1, line_ending)));
     let mut parser = terminated(
         many0(crate::parser::blocks::block(Rc::new(state))),
-        terminated(empty_lines, eof),
+        (empty_lines, eof),
     );
-    match parser.parse(input) {
-        Ok((remaining, blocks)) => {
-            if remaining.is_empty() {
-                Ok(Document { blocks })
-            } else {
-                Err(nom::Err::Error(make_error(
-                    remaining,
-                    nom::error::ErrorKind::Eof,
-                )))
-            }
-        }
-        Err(err) => Err(err),
-    }
+    let (_, blocks) = parser.parse(input)?;
+
+    Ok(Document { blocks })
 }
