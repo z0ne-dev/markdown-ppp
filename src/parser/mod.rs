@@ -10,12 +10,12 @@ use alloc::rc::Rc;
 use nom::{
     branch::alt,
     character::complete::{line_ending, space1},
+    combinator::eof,
     error::make_error,
     multi::many0,
     sequence::terminated,
     Parser,
 };
-use util::eof_or_eol;
 
 pub struct MarkdownParserState {
     pub config: Rc<MarkdownParserConfig>,
@@ -43,7 +43,7 @@ pub fn parse_markdown(
     let empty_lines = many0(alt((space1, line_ending)));
     let mut parser = terminated(
         many0(crate::parser::blocks::block(Rc::new(state))),
-        terminated(empty_lines, eof_or_eol),
+        terminated(empty_lines, eof),
     );
     match parser.parse(input) {
         Ok((remaining, blocks)) => {

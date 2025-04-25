@@ -69,3 +69,17 @@ fn multi_paragraph3() {
         }
     );
 }
+
+#[test]
+fn multi_paragraph4() {
+    let doc = parse_markdown(MarkdownParserState::default(), "aaa\n\n===").unwrap();
+    assert_eq!(
+        doc,
+        Document {
+            blocks: vec![
+                Block::Paragraph(vec![Inline::Text("aaa".to_string())]),
+                Block::Paragraph(vec![Inline::Text("===".to_string())]),
+            ]
+        }
+    );
+}

@@ -46,7 +46,7 @@ pub(crate) fn heading_v2_or_paragraph<'a>(
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Block> {
     move |input: &'a str| {
         let (input, (content, level)) = (
-            crate::parser::blocks::paragraph::paragraph(state.clone()),
+            crate::parser::blocks::paragraph::paragraph(state.clone(), true),
             opt(heading_v2_level(state.clone())),
         )
             .parse(input)?;

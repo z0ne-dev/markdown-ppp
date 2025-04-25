@@ -6,23 +6,36 @@ use nom::{
     branch::alt,
     character::complete::{char, line_ending, space0},
     combinator::{not, peek, value},
-    multi::{many_m_n, separated_list1},
+    multi::{many_m_n, separated_list0},
     sequence::preceded,
     IResult, Parser,
 };
 
 pub(crate) fn paragraph<'a>(
     state: Rc<MarkdownParserState>,
+    check_first_line: bool,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<Inline>> {
     move |input: &'a str| {
-        let paragraph_parser = separated_list1(
+        let mut lines = Vec::new();
+        let input = if check_first_line {
+            input
+        } else {
+            // Skip checks for the first line, just make it a paragraph
+            let (input, first_line) =
+                preceded(many_m_n(0, 3, char(' ')), not_eof_or_eol1).parse(input)?;
+            lines.push(first_line);
+            input
+        };
+
+        let paragraph_parser = separated_list0(
             line_ending,
             preceded(
                 is_paragraph_line_start(state.clone()),
                 preceded(many_m_n(0, 3, char(' ')), not_eof_or_eol1),
             ),
         );
-        let (input, lines) = line_terminated(paragraph_parser).parse(input)?;
+        let (input, rest_lines) = line_terminated(paragraph_parser).parse(input)?;
+        lines.extend(rest_lines);
 
         let content = lines.join("\n");
 

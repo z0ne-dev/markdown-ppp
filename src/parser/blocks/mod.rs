@@ -101,7 +101,7 @@ pub(crate) fn block<'a>(
                 conditional_block(
                     state.config.block_paragraph_behavior.clone(),
                     map(
-                        crate::parser::blocks::paragraph::paragraph(state.clone()),
+                        crate::parser::blocks::paragraph::paragraph(state.clone(), false),
                         Block::Paragraph,
                     ),
                 ),
