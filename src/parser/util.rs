@@ -85,21 +85,21 @@ where
     terminated(inner, eof_or_eol)
 }
 
-// pub(crate) fn logged<'a, O, P>(
-//     message: &'static str,
-//     mut inner: P,
-// ) -> impl Parser<&'a str, Output = O, Error = nom::error::Error<&'a str>>
-// where
-//     P: Parser<&'a str, Output = O, Error = nom::error::Error<&'a str>>,
-//     O: std::fmt::Debug,
-// {
-//     move |input: &'a str| {
-//         println!("Logged: {message}: {:?}", input);
-//         let r = inner.parse(input);
-//         println!("Logged out: {message}: {:?}", r);
-//         r
-//     }
-// }
+pub(crate) fn logged<'a, O, P>(
+    message: &'static str,
+    mut inner: P,
+) -> impl Parser<&'a str, Output = O, Error = nom::error::Error<&'a str>>
+where
+    P: Parser<&'a str, Output = O, Error = nom::error::Error<&'a str>>,
+    O: std::fmt::Debug,
+{
+    move |input: &'a str| {
+        println!("Logged: {message}: {:?}", input);
+        let r = inner.parse(input);
+        println!("Logged out: {message}: {:?}", r);
+        r
+    }
+}
 
 pub(crate) fn conditional<'a, O, P>(
     behavior: crate::parser::config::ElementBehavior<O>,
@@ -112,7 +112,7 @@ where
 {
     move |input: &'a str| {
         let inner1 = |s: &'a str| inner.parse(s);
-        match behavior {
+        match &behavior {
             crate::parser::config::ElementBehavior::Ignore => fail().parse(input),
             crate::parser::config::ElementBehavior::Parse => inner.parse(input),
             crate::parser::config::ElementBehavior::Skip => {
@@ -120,8 +120,8 @@ where
             }
             crate::parser::config::ElementBehavior::Map(f) => {
                 let (i, o) = inner.parse(input)?;
-                let f1 = |o| f(o);
-                let mapped = f1(o);
+                let mut f1 = (**f).borrow_mut();
+                let mapped = (f1.as_mut())(o);
                 Ok((i, mapped))
             }
         }

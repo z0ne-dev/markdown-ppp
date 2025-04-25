@@ -100,6 +100,7 @@ pub(crate) fn is_paragraph_line_start<'a>(
                 state.config.block_table_behavior.clone(),
                 value((), crate::parser::blocks::table::table(state.clone())),
             ),
+            value((), crate::parser::blocks::custom_parser(state.clone())),
             value((), line_terminated(space0)),
         ))))
         .parse(input)

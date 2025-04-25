@@ -1,5 +1,6 @@
 mod blockquote;
 mod code_block;
+mod custom_parser;
 mod footnote_definition;
 mod heading;
 mod html_block;

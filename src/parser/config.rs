@@ -1,4 +1,19 @@
+use alloc::rc::Rc;
+use core::cell::RefCell;
+use nom::IResult;
+// TODO use hashbrown::HashMap
 use std::collections::HashMap;
+
+/// Function type for mapping elements.
+type ElementMapFn<ELT> = Rc<RefCell<Box<dyn FnMut(ELT) -> ELT>>>;
+
+/// Function type for custom block parsers.
+type CustomBlockParserFn =
+    Rc<RefCell<Box<dyn for<'a> FnMut(&'a str) -> IResult<&'a str, crate::ast::Block>>>>;
+
+/// Function type for custom inline parsers.
+type CustomInlineParserFn =
+    Rc<RefCell<Box<dyn for<'a> FnMut(&'a str) -> IResult<&'a str, crate::ast::Inline>>>>;
 
 /// Behavior of the parser when encountering certain elements.
 #[derive(Clone)]
@@ -13,7 +28,8 @@ pub enum ElementBehavior<ELT> {
     /// Parse element but do not include it in the output.
     Skip,
 
-    Map(fn(ELT) -> ELT),
+    /// Parse the element and apply a custom function to it.
+    Map(ElementMapFn<ELT>),
 }
 
 /// A configuration for the Markdown parser.
@@ -87,6 +103,12 @@ pub struct MarkdownParserConfig {
 
     /// The behavior of the parser when encountering inline text.
     pub(crate) inline_text_behavior: ElementBehavior<crate::ast::Inline>,
+
+    /// A custom parser for blocks. This is a function that takes a string and returns a `Block`.
+    pub(crate) custom_block_parser: Option<CustomBlockParserFn>,
+
+    /// A custom parser for inlines. This is a function that takes a string and returns a `Inline`.
+    pub(crate) custom_inline_parser: Option<CustomInlineParserFn>,
 }
 
 impl Default for MarkdownParserConfig {
@@ -115,6 +137,8 @@ impl Default for MarkdownParserConfig {
             inline_emphasis_behavior: ElementBehavior::Parse,
             inline_strikethrough_behavior: ElementBehavior::Parse,
             inline_text_behavior: ElementBehavior::Parse,
+            custom_block_parser: None,
+            custom_inline_parser: None,
         }
     }
 }
@@ -359,6 +383,22 @@ impl MarkdownParserConfig {
     pub fn with_inline_text_behavior(self, behavior: ElementBehavior<crate::ast::Inline>) -> Self {
         Self {
             inline_text_behavior: behavior,
+            ..self
+        }
+    }
+
+    /// Set a custom parser for blocks.
+    pub fn with_custom_block_parser(self, parser: CustomBlockParserFn) -> Self {
+        Self {
+            custom_block_parser: Some(parser),
+            ..self
+        }
+    }
+
+    /// Set a custom parser for inlines.
+    pub fn with_custom_inline_parser(self, parser: CustomInlineParserFn) -> Self {
+        Self {
+            custom_inline_parser: Some(parser),
             ..self
         }
     }

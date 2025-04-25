@@ -17,6 +17,7 @@ use crate::parser::util::*;
 use crate::parser::MarkdownParserState;
 use alloc::rc::Rc;
 use nom::branch::alt;
+use nom::combinator::fail;
 use nom::{combinator::map, sequence::preceded, IResult, Parser};
 
 pub(crate) fn block<'a>(
@@ -96,6 +97,7 @@ pub(crate) fn block<'a>(
                         Block::Table,
                     ),
                 ),
+                custom_parser(state.clone()),
                 conditional_block(
                     state.config.block_paragraph_behavior.clone(),
                     map(
@@ -106,5 +108,18 @@ pub(crate) fn block<'a>(
             )),
         )
         .parse(input)
+    }
+}
+
+pub(crate) fn custom_parser(
+    state: Rc<MarkdownParserState>,
+) -> impl FnMut(&str) -> IResult<&str, Block> {
+    move |input: &str| {
+        if let Some(custom_parser) = state.config.custom_block_parser.as_ref() {
+            let mut p = (**custom_parser).borrow_mut();
+            (p.as_mut())(input)
+        } else {
+            fail().parse(input)
+        }
     }
 }

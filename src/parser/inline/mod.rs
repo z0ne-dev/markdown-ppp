@@ -19,7 +19,7 @@ use alloc::rc::Rc;
 use alloc::vec::Vec;
 use nom::{
     branch::alt,
-    combinator::map,
+    combinator::{fail, map},
     multi::{many0, many1},
     IResult, Parser,
 };
@@ -82,11 +82,23 @@ pub(crate) fn inline<'a>(
                 state.config.inline_strikethrough_behavior.clone(),
                 crate::parser::inline::strikethrough::strikethrough(state.clone()),
             ),
+            custom_parser(state.clone()),
             conditional_inline(
                 state.config.inline_text_behavior.clone(),
                 crate::parser::inline::text::text(state.clone()),
             ),
         ))
         .parse(input)
+    }
+}
+
+fn custom_parser(state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, Inline> {
+    move |input: &str| {
+        if let Some(custom_parser) = state.config.custom_inline_parser.as_ref() {
+            let mut p = (**custom_parser).borrow_mut();
+            (p.as_mut())(input)
+        } else {
+            fail().parse(input)
+        }
     }
 }
