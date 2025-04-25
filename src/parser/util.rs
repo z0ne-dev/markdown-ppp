@@ -85,21 +85,21 @@ where
     terminated(inner, eof_or_eol)
 }
 
-pub(crate) fn logged<'a, O, P>(
-    message: &'static str,
-    mut inner: P,
-) -> impl Parser<&'a str, Output = O, Error = nom::error::Error<&'a str>>
-where
-    P: Parser<&'a str, Output = O, Error = nom::error::Error<&'a str>>,
-    O: std::fmt::Debug,
-{
-    move |input: &'a str| {
-        println!("Logged: {message}: {:?}", input);
-        let r = inner.parse(input);
-        println!("Logged out: {message}: {:?}", r);
-        r
-    }
-}
+// pub(crate) fn logged<'a, O, P>(
+//     message: &'static str,
+//     mut inner: P,
+// ) -> impl Parser<&'a str, Output = O, Error = nom::error::Error<&'a str>>
+// where
+//     P: Parser<&'a str, Output = O, Error = nom::error::Error<&'a str>>,
+//     O: std::fmt::Debug,
+// {
+//     move |input: &'a str| {
+//         println!("Logged: {message}: {:?}", input);
+//         let r = inner.parse(input);
+//         println!("Logged out: {message}: {:?}", r);
+//         r
+//     }
+// }
 
 pub(crate) fn conditional<'a, O, P>(
     behavior: crate::parser::config::ElementBehavior<O>,
