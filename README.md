@@ -197,11 +197,12 @@ You can use the AST independently without the parsing functionality by disabling
 
 ## 🔧 Optional Features
 
-| Feature  | Description                             |
-|:---------|:----------------------------------------|
-| `parser` | Enables Markdown parsing support. Enabled by default. |
+| Feature         | Description                                                        |
+|:----------------|:-------------------------------------------------------------------|
+| `parser`        | Enables Markdown parsing support. Enabled by default.              |
+| `ast-serde`     | Adds `Serialize` and `Deserialize` traits to all AST types via `serde`. Disabled by default. |
 
-If you only need the AST types, add the crate without default features:
+If you only need the AST types without parsing functionality, you can add the crate without default features:
 
 ```bash
 cargo add --no-default-features markdown-ppp
@@ -218,3 +219,4 @@ cargo add --no-default-features markdown-ppp
 ## 📝 License
 
 Licensed under the [MIT License](LICENSE).
+
