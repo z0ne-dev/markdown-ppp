@@ -1,5 +1,5 @@
 mod blocks;
-mod config;
+pub mod config;
 mod inline;
 mod link_util;
 mod util;
