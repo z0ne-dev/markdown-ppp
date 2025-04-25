@@ -1,7 +1,15 @@
 [package]
+authors = ["Evgenii Lepikhin <johnlepikhin@gmail.com>"]
 name = "markdown-ppp"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "Feature-rich Markdown Parsing and Pretty-Printing library"
+repository = "https://github.com/johnlepikhin/markdown-ppp"
+categories = ["parsing", "text-processing"]
+keywords = ["markdown", "parser", "pretty-print", "format"]
+documentation = "https://docs.rs/markdown-ppp"
+readme = "README.md"
 
 [dependencies]
 entities = { version = "1.0.1", optional = true }
