@@ -4,6 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-entities = "1.0.1"
-nom = { version = "8.0.0", default-features = false, features = ["alloc"] }
-unicode_categories = "0.1.1"
+entities = { version = "1.0.1", optional = true }
+nom = { version = "8.0.0", default-features = false, features = ["alloc"], optional = true }
+unicode_categories = { version = "0.1.1", optional = true }
+
+[features]
+default = ["parser"]
+parser = ["entities", "nom", "unicode_categories"]
