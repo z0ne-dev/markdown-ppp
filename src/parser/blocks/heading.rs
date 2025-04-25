@@ -22,12 +22,15 @@ pub(crate) fn heading_v1<'a>(
         } else {
             space1
         };
-        let (input, (prefix, _, content)) = line_terminated((
+
+        let (input, (prefix, _, content)) = (
             many_m_n(1, 6, char('#')),
             to_space_or_not_to_space,
-            crate::parser::inline::inline_many0(state.clone()),
-        ))
-        .parse(input)?;
+            line_terminated(not_eof_or_eol1),
+        )
+            .parse(input)?;
+
+        let (_, content) = crate::parser::inline::inline_many0(state.clone()).parse(content)?;
 
         let heading = Heading {
             level: prefix.len() as u8,
