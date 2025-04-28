@@ -126,7 +126,7 @@ fn list_item_rest_line(
                     many_m_n(0, prefix_length, char(' ')),
                     map(not_eof_or_eol1, |v| vec![v]),
                 ),
-                // If this is empty newline, followed by prefix_length spaces
+                // If this is empty line, followed by prefix_length spaces
                 map(
                     (
                         recognize(many1(line_terminated(space0))),
