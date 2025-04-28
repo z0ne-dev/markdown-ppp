@@ -3,62 +3,10 @@ use nom::{
     branch::alt,
     character::complete::{anychar, line_ending, not_line_ending, space0},
     combinator::{eof, fail, not, recognize, value},
-    error::ParseError,
     multi::{many0, many1},
     sequence::{preceded, terminated},
     IResult, Parser,
 };
-
-pub(crate) fn separated_list_m_n<
-    I: Clone + PartialEq,
-    O,
-    O2,
-    E: ParseError<I>,
-    F: Parser<I, Output = O, Error = E>,
-    G: Parser<I, Output = O2, Error = E>,
->(
-    min: usize,
-    max: usize,
-    mut separator: G,
-    mut parser: F,
-) -> impl FnMut(I) -> IResult<I, Vec<O>, E> {
-    move |input: I| {
-        assert!(min >= 1 && max >= min, "invalid m/n bounds");
-
-        let (mut i, first) = parser.parse(input.clone())?;
-        let mut out = Vec::with_capacity(min.max(1));
-        out.push(first);
-
-        while out.len() < max {
-            let checkpoint = i.clone();
-
-            let (i_sep, _) = match separator.parse(checkpoint.clone()) {
-                Ok(r) => r,
-                Err(_) => break,
-            };
-
-            match parser.parse(i_sep.clone()) {
-                Ok((next_i, elt)) => {
-                    out.push(elt);
-                    i = next_i;
-                }
-                Err(_) => {
-                    i = checkpoint;
-                    break;
-                }
-            }
-        }
-
-        if out.len() < min {
-            Err(nom::Err::Error(E::from_error_kind(
-                i,
-                nom::error::ErrorKind::SeparatedList,
-            )))
-        } else {
-            Ok((i, out))
-        }
-    }
-}
 
 pub(crate) fn eof_or_eol(input: &str) -> IResult<&str, &str> {
     alt((line_ending, eof)).parse(input)

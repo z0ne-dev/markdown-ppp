@@ -17,6 +17,20 @@ fn blockquote1() {
 }
 
 #[test]
+fn blockquote2() {
+    let doc = parse_markdown(MarkdownParserState::default(), ">> a\n>>\n>> b").unwrap();
+    assert_eq!(
+        doc,
+        Document {
+            blocks: vec![Block::BlockQuote(vec![Block::BlockQuote(vec![
+                Block::Paragraph(vec![Inline::Text("a".to_owned()),]),
+                Block::Paragraph(vec![Inline::Text("b".to_owned())])
+            ])])]
+        }
+    );
+}
+
+#[test]
 fn blockquote_skip1() {
     let config =
         MarkdownParserConfig::default().with_block_blockquote_behavior(ElementBehavior::Skip);
