@@ -72,11 +72,33 @@ pub enum Block {
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Heading {
-    /// Heading level (1 ⇒ `<h1>`, …, 6 ⇒ `<h6>`).
-    pub level: u8,
+    /// Kind of heading (ATX or Setext) together with the level.
+    pub kind: HeadingKind,
 
     /// Inlines that form the heading text (before trimming).
     pub content: Vec<Inline>,
+}
+
+/// Heading with level 1–6 and inline content.
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum HeadingKind {
+    /// ATX heading (`# Heading`)
+    Atx(u8),
+
+    /// Setext heading (`===` or `---`)
+    Setext(SetextHeading),
+}
+
+/// Setext heading with level and underline type.
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum SetextHeading {
+    /// Setext heading with `=` underline
+    Level1,
+
+    /// Setext heading with `-` underline
+    Level2,
 }
 
 // ——————————————————————————————————————————————————————————————————————————

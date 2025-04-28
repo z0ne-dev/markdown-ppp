@@ -19,7 +19,7 @@ fn custom_parser1() {
             blocks: vec![
                 Block::ThematicBreak,
                 Block::Heading(Heading {
-                    level: 1,
+                    kind: HeadingKind::Setext(SetextHeading::Level1),
                     content: vec![Inline::Text("text".to_owned())]
                 })
             ]

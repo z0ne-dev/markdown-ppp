@@ -8,7 +8,7 @@ fn heading_v1() {
         doc,
         Document {
             blocks: vec![Block::Heading(Heading {
-                level: 2,
+                kind: HeadingKind::Atx(2),
                 content: vec![Inline::Text("a".to_owned())]
             })]
         }
@@ -28,7 +28,7 @@ fn heading_v1() {
         doc,
         Document {
             blocks: vec![Block::Heading(Heading {
-                level: 2,
+                kind: HeadingKind::Atx(2),
                 content: vec![Inline::Text("a".to_owned())]
             })]
         }
@@ -42,7 +42,7 @@ fn heading_v2() {
         doc,
         Document {
             blocks: vec![Block::Heading(Heading {
-                level: 1,
+                kind: HeadingKind::Setext(SetextHeading::Level1),
                 content: vec![Inline::Text("a".to_owned())]
             })]
         }
@@ -53,7 +53,7 @@ fn heading_v2() {
         doc,
         Document {
             blocks: vec![Block::Heading(Heading {
-                level: 2,
+                kind: HeadingKind::Setext(SetextHeading::Level2),
                 content: vec![Inline::Text("a".to_owned())]
             })]
         }

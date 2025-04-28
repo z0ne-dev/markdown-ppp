@@ -1,4 +1,4 @@
-use crate::ast::{Block, Heading};
+use crate::ast::{Block, Heading, HeadingKind, SetextHeading};
 use crate::parser::util::*;
 use crate::parser::MarkdownParserState;
 use nom::{
@@ -33,7 +33,7 @@ pub(crate) fn heading_v1<'a>(
         let (_, content) = crate::parser::inline::inline_many0(state.clone()).parse(content)?;
 
         let heading = Heading {
-            level: prefix.len() as u8,
+            kind: HeadingKind::Atx(prefix.len() as u8),
             content,
         };
 
@@ -55,7 +55,10 @@ pub(crate) fn heading_v2_or_paragraph<'a>(
             .parse(input)?;
 
         if let Some(level) = level {
-            let heading = Heading { level, content };
+            let heading = Heading {
+                kind: HeadingKind::Setext(level),
+                content,
+            };
             return Ok((input, Block::Heading(heading)));
         }
 
@@ -65,9 +68,12 @@ pub(crate) fn heading_v2_or_paragraph<'a>(
 
 pub(crate) fn heading_v2_level<'a>(
     _state: Rc<MarkdownParserState>,
-) -> impl FnMut(&'a str) -> IResult<&'a str, u8> {
+) -> impl FnMut(&'a str) -> IResult<&'a str, SetextHeading> {
     move |input: &'a str| {
-        let setext_parser = alt((value(1, many1(char('='))), value(2, many1(char('-')))));
+        let setext_parser = alt((
+            value(SetextHeading::Level1, many1(char('='))),
+            value(SetextHeading::Level2, many1(char('-'))),
+        ));
 
         let r = line_terminated(preceded(
             many_m_n(0, 3, char(' ')),
