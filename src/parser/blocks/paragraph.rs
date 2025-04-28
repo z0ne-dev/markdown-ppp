@@ -79,7 +79,7 @@ pub(crate) fn is_paragraph_line_start<'a>(
             ),
             conditional_block_unit(
                 state.config.block_list_behavior.clone(),
-                value((), crate::parser::blocks::list::list_marker_with_span_size),
+                value((), crate::parser::blocks::list::list_item(state.clone())),
             ),
             conditional_block_unit(
                 state.config.block_code_block_behavior.clone(),

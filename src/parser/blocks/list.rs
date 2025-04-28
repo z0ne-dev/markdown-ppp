@@ -150,7 +150,7 @@ fn list_item_lines(
     move |input: &str| many0(list_item_rest_line(state.clone(), prefix_length)).parse(input)
 }
 
-fn list_item(
+pub(crate) fn list_item(
     state: Rc<MarkdownParserState>,
 ) -> impl FnMut(&str) -> IResult<&str, (ListKind, ListItem)> {
     move |input: &str| {
