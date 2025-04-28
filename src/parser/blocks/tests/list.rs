@@ -150,6 +150,52 @@ fn list8() {
 }
 
 #[test]
+fn list9() {
+    let doc = parse_markdown(
+        MarkdownParserState::default(),
+        "1. list1\n   * list2\n   * list2\n2. list1",
+    )
+    .unwrap();
+    assert_eq!(
+        doc,
+        Document {
+            blocks: vec![Block::List(List {
+                kind: ListKind::Ordered(ListOrderedKindOptions { start: 1 }),
+                items: vec![
+                    ListItem {
+                        task: None,
+                        blocks: vec![
+                            Block::Paragraph(vec![Inline::Text("list1".to_owned())]),
+                            Block::List(List {
+                                kind: ListKind::Bullet(ListBulletKind::Star),
+                                items: vec![
+                                    ListItem {
+                                        task: None,
+                                        blocks: vec![Block::Paragraph(vec![Inline::Text(
+                                            "list2".to_owned()
+                                        )]),]
+                                    },
+                                    ListItem {
+                                        task: None,
+                                        blocks: vec![Block::Paragraph(vec![Inline::Text(
+                                            "list2".to_owned()
+                                        )]),]
+                                    }
+                                ]
+                            })
+                        ]
+                    },
+                    ListItem {
+                        task: None,
+                        blocks: vec![Block::Paragraph(vec![Inline::Text("list1".to_owned())])]
+                    }
+                ]
+            })]
+        },
+    );
+}
+
+#[test]
 fn task_list1() {
     let doc = parse_markdown(MarkdownParserState::default(), " - [ ] a").unwrap();
     assert_eq!(

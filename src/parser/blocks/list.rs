@@ -24,15 +24,23 @@ fn list_item_task_state(input: &str) -> IResult<&str, TaskState> {
 }
 
 fn list_marker(input: &str) -> IResult<&str, ListKind> {
+    alt((list_marker_ordered, list_marker_unordered)).parse(input)
+}
+
+fn list_marker_unordered(input: &str) -> IResult<&str, ListKind> {
     alt((
         map(char('*'), |_| ListKind::Bullet(ListBulletKind::Star)),
         map(char('+'), |_| ListKind::Bullet(ListBulletKind::Plus)),
         map(char('-'), |_| ListKind::Bullet(ListBulletKind::Dash)),
-        map(
-            terminated(nom::character::complete::u64, one_of(".)")),
-            |start| ListKind::Ordered(ListOrderedKindOptions { start }),
-        ),
     ))
+    .parse(input)
+}
+
+fn list_marker_ordered(input: &str) -> IResult<&str, ListKind> {
+    map(
+        terminated(nom::character::complete::u64, one_of(".)")),
+        |start| ListKind::Ordered(ListOrderedKindOptions { start }),
+    )
     .parse(input)
 }
 
@@ -101,6 +109,7 @@ pub(crate) fn list_marker_with_span_size(
 
 fn list_item_rest_line(
     state: Rc<MarkdownParserState>,
+    marker_is_ordered: bool,
     prefix_length: usize,
 ) -> impl FnMut(&str) -> IResult<&str, Vec<&str>> {
     move |input: &str| {
@@ -112,13 +121,20 @@ fn list_item_rest_line(
             )));
         }
 
+        let marker_parser = if marker_is_ordered {
+            list_marker_ordered
+        } else {
+            list_marker_unordered
+        };
+
         line_terminated(preceded(
             peek(not(alt((
                 value(
                     (),
                     crate::parser::blocks::thematic_break::thematic_break(state.clone()),
                 ),
-                value((), list_marker_with_span_size),
+                // value((), list_marker_with_span_size),
+                value((), marker_parser),
             )))),
             alt((
                 // If starts with 0 <= prefix_length spaces
@@ -145,9 +161,17 @@ fn list_item_rest_line(
 
 fn list_item_lines(
     state: Rc<MarkdownParserState>,
+    marker_is_ordered: bool,
     prefix_length: usize,
 ) -> impl FnMut(&str) -> IResult<&str, Vec<Vec<&str>>> {
-    move |input: &str| many0(list_item_rest_line(state.clone(), prefix_length)).parse(input)
+    move |input: &str| {
+        many0(list_item_rest_line(
+            state.clone(),
+            marker_is_ordered,
+            prefix_length,
+        ))
+        .parse(input)
+    }
 }
 
 pub(crate) fn list_item(
@@ -157,8 +181,13 @@ pub(crate) fn list_item(
         let (input, (list_kind, item_prefix_length, task_state, first_line)) =
             list_marker_with_span_size(input)?;
 
+        let marker_is_ordered = match list_kind {
+            ListKind::Ordered(_) => true,
+            ListKind::Bullet(_) => false,
+        };
+
         let (input, rest_lines) =
-            list_item_lines(state.clone(), item_prefix_length).parse(input)?;
+            list_item_lines(state.clone(), marker_is_ordered, item_prefix_length).parse(input)?;
 
         let total_size = first_line.len() + rest_lines.len();
         let mut item_content = String::with_capacity(total_size);
