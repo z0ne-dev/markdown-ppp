@@ -79,6 +79,7 @@ fn parse_alignment_row(input: &str) -> IResult<&str, Vec<Alignment>> {
     let alignment_parser = delimited(
         space0,
         alt((
+            recognize(delimited(char(':'), many1(char('-')), char(':'))),
             recognize(preceded(char(':'), many1(char('-')))),
             recognize(terminated(many1(char('-')), char(':'))),
             recognize(many1(char('-'))),
