@@ -1,6 +1,7 @@
-use super::eof_or_eol;
+use super::{eof_or_eol, line_terminated};
 use crate::ast::{Alignment, Inline, Table, TableRow};
 use crate::parser::MarkdownParserState;
+use nom::multi::many_m_n;
 use nom::{
     branch::alt,
     bytes::complete::tag,
@@ -87,14 +88,14 @@ fn parse_alignment_row(input: &str) -> IResult<&str, Vec<Alignment>> {
         space0,
     );
 
-    terminated(
+    line_terminated(preceded(
+        many_m_n(0, 3, char(' ')),
         delimited(
             char('|'),
             separated_list1(char('|'), map(alignment_parser, parse_cell_alignment)),
             opt(char('|')),
         ),
-        eof_or_eol,
-    )
+    ))
     .parse(input)
 }
 
@@ -102,14 +103,14 @@ fn parse_table_row<'a>(
     state: Rc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, TableRow> {
     move |input: &'a str| {
-        terminated(
+        line_terminated(preceded(
+            many_m_n(0, 3, char(' ')),
             delimited(
                 char('|'),
                 separated_list1(char('|'), cell_content(state.clone())),
                 char('|'),
             ),
-            eof_or_eol,
-        )
+        ))
         .parse(input)
     }
 }
