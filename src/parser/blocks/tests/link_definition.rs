@@ -11,7 +11,7 @@ fn link_definition1() {
         doc,
         Document {
             blocks: vec![Block::Definition(LinkDefinition {
-                label: "foo".to_owned(),
+                label: vec![Inline::Text("foo".to_owned())],
                 destination: "/url".to_owned(),
                 title: Some("title".to_owned())
             })]
@@ -33,7 +33,7 @@ fn link_definition2() {
         doc,
         Document {
             blocks: vec![Block::Definition(LinkDefinition {
-                label: "foo".to_owned(),
+                label: vec![Inline::Text("foo".to_owned())],
                 destination: "/url".to_owned(),
                 title: Some("the title".to_owned())
             })]
@@ -52,7 +52,7 @@ fn link_definition3() {
         doc,
         Document {
             blocks: vec![Block::Definition(LinkDefinition {
-                label: "Foo*bar]".to_owned(),
+                label: vec![Inline::Text("Foo*bar]".to_owned())],
                 destination: "my_(url)".to_owned(),
                 title: Some("title (with parens)".to_owned())
             })]
@@ -73,7 +73,7 @@ fn link_definition4() {
         doc,
         Document {
             blocks: vec![Block::Definition(LinkDefinition {
-                label: "Foo bar".to_owned(),
+                label: vec![Inline::Text("Foo bar".to_owned())],
                 destination: "my url".to_owned(),
                 title: Some("title".to_owned())
             })]
@@ -96,7 +96,7 @@ line2
         doc,
         Document {
             blocks: vec![Block::Definition(LinkDefinition {
-                label: "foo".to_owned(),
+                label: vec![Inline::Text("foo".to_owned())],
                 destination: "/url".to_owned(),
                 title: Some("\ntitle\nline1\nline2\n".to_owned())
             })]
@@ -116,7 +116,7 @@ fn link_definition6() {
         doc,
         Document {
             blocks: vec![Block::Definition(LinkDefinition {
-                label: "foo".to_owned(),
+                label: vec![Inline::Text("foo".to_owned())],
                 destination: "/url".to_owned(),
                 title: None
             })]
@@ -131,7 +131,7 @@ fn link_definition7() {
         doc,
         Document {
             blocks: vec![Block::Definition(LinkDefinition {
-                label: "foo".to_owned(),
+                label: vec![Inline::Text("foo".to_owned())],
                 destination: "".to_owned(),
                 title: None
             })]
@@ -144,8 +144,10 @@ fn link_definition_mapped1() {
     let config = MarkdownParserConfig::default().with_block_link_definition_behavior(
         ElementBehavior::Map(Rc::new(RefCell::new(Box::new(|block| {
             if let Block::Definition(v) = block {
+                let mut label = vec![Inline::Text("mapped ".to_owned())];
+                label.extend(v.label);
                 Block::Definition(LinkDefinition {
-                    label: format!("mapped {}", v.label),
+                    label,
                     destination: format!("mapped {}", v.destination),
                     title: v.title.map(|t| format!("mapped {}", t)),
                 })
@@ -163,7 +165,10 @@ fn link_definition_mapped1() {
         doc,
         Document {
             blocks: vec![Block::Definition(LinkDefinition {
-                label: "mapped foo".to_owned(),
+                label: vec![
+                    Inline::Text("mapped ".to_owned()),
+                    Inline::Text("foo".to_owned())
+                ],
                 destination: "mapped /url".to_owned(),
                 title: Some("mapped title".to_owned())
             })]

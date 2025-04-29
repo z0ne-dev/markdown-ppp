@@ -18,20 +18,21 @@ pub(crate) fn reference_link<'a>(
 }
 
 pub(crate) fn reference_link_full<'a>(
-    _state: Rc<MarkdownParserState>,
+    state: Rc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
-        let (input, (text, label)) = (link_label, link_label).parse(input)?;
+        let (input, (text, label)) =
+            (link_label(state.clone()), link_label(state.clone())).parse(input)?;
         let link_reference = LinkReference { label, text };
         Ok((input, Inline::LinkReference(link_reference)))
     }
 }
 
 pub(crate) fn reference_link_collapsed<'a>(
-    _state: Rc<MarkdownParserState>,
+    state: Rc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
-        let (input, text) = terminated(link_label, tag("[]")).parse(input)?;
+        let (input, text) = terminated(link_label(state.clone()), tag("[]")).parse(input)?;
         let link_reference = LinkReference {
             label: text.clone(),
             text,
@@ -41,10 +42,10 @@ pub(crate) fn reference_link_collapsed<'a>(
 }
 
 pub(crate) fn reference_link_shortcut<'a>(
-    _state: Rc<MarkdownParserState>,
+    state: Rc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
-        let (input, text) = link_label.parse(input)?;
+        let (input, text) = link_label(state.clone()).parse(input)?;
         let link_reference = LinkReference {
             label: text.clone(),
             text,

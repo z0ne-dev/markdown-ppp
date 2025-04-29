@@ -13,8 +13,8 @@ pub(crate) fn inline_link<'a>(
     state: Rc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Link> {
     move |input: &'a str| {
-        let (input, (label, (destination, title))) = (
-            link_label,
+        let (input, (children, (destination, title))) = (
+            link_label(state.clone()),
             delimited(
                 char('('),
                 (
@@ -25,10 +25,6 @@ pub(crate) fn inline_link<'a>(
             ),
         )
             .parse(input)?;
-
-        let (_, children) = crate::parser::inline::inline_many0(state.clone())
-            .parse(label.as_str())
-            .map_err(|err| err.map_input(|_| input))?;
 
         let link = Link {
             destination,

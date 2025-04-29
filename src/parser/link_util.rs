@@ -7,39 +7,39 @@ use nom::{
     sequence::{delimited, preceded},
     IResult, Parser,
 };
+use std::rc::Rc;
 
-pub(crate) fn link_label(input: &str) -> IResult<&str, String> {
-    let (input, content) = delimited(tag("["), link_label_inner, tag("]")).parse(input)?;
+use super::MarkdownParserState;
 
-    if content.chars().any(|c| !c.is_whitespace()) {
-        Ok((input, content))
-    } else {
-        Err(nom::Err::Error(nom::error::Error::new(
-            input,
-            nom::error::ErrorKind::Verify,
-        )))
+pub(crate) fn link_label<'a>(
+    state: Rc<MarkdownParserState>,
+) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<crate::ast::Inline>> {
+    move |input: &'a str| {
+        delimited(tag("["), link_label_inner(state.clone()), tag("]")).parse(input)
     }
 }
 
-fn link_label_inner(input: &str) -> IResult<&str, String> {
-    map(
-        fold_many0(link_label_inner_char, String::new, |mut acc, c| {
-            if acc.len() < 999 {
-                acc.push(c);
-            }
-            acc
-        }),
-        |s| s,
-    )
-    .parse(input)
-}
+fn link_label_inner<'a>(
+    state: Rc<MarkdownParserState>,
+) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<crate::ast::Inline>> {
+    move |input: &'a str| {
+        let (input, label_chars) = verify(
+            many1(preceded(
+                peek(not(char(']'))),
+                alt((value(']', tag("\\]")), anychar)),
+            )),
+            |chars: &[char]| chars.iter().any(|&c| c != ' ' && c != '\n') && chars.len() < 1000,
+        )
+        .parse(input)?;
 
-fn link_label_inner_char(input: &str) -> IResult<&str, char> {
-    alt((
-        escaped_char,
-        verify(anychar, |&c| c != '[' && c != ']' && !c.is_control()),
-    ))
-    .parse(input)
+        let label = label_chars.iter().collect::<String>();
+
+        let (_, label) = crate::parser::inline::inline_many1(state.clone())
+            .parse(label.as_str())
+            .map_err(|err| err.map_input(|_| input))?;
+
+        Ok((input, label))
+    }
 }
 
 pub(crate) fn link_title(input: &str) -> IResult<&str, String> {

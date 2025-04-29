@@ -13,7 +13,7 @@ use nom::{
 use std::rc::Rc;
 
 pub(crate) fn link_definition<'a>(
-    _state: Rc<MarkdownParserState>,
+    state: Rc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, LinkDefinition> {
     move |input: &'a str| {
         let mut one_line_whitespace0 = (space0, opt(line_ending), space0);
@@ -30,7 +30,8 @@ pub(crate) fn link_definition<'a>(
             },
         );
 
-        let (input, label) = preceded(many_m_n(0, 3, char(' ')), link_label).parse(input)?;
+        let (input, label) =
+            preceded(many_m_n(0, 3, char(' ')), link_label(state.clone())).parse(input)?;
         let (input, _) = char(':').parse(input)?;
         let (input, _) = one_line_whitespace0.parse(input)?;
         let (input, destination) = link_destination.parse(input)?;
@@ -38,7 +39,7 @@ pub(crate) fn link_definition<'a>(
         let (input, _) = eof_or_eol.parse(input)?;
 
         let v = LinkDefinition {
-            label: label.to_string(),
+            label,
             destination,
             title,
         };

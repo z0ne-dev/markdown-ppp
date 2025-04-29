@@ -9,8 +9,8 @@ fn reference_link1() {
         Document {
             blocks: vec![Block::Paragraph(vec![Inline::LinkReference(
                 LinkReference {
-                    label: "label".to_owned(),
-                    text: "text".to_owned()
+                    label: vec![Inline::Text("label".to_owned())],
+                    text: vec![Inline::Text("text".to_owned())],
                 }
             )])],
         }
@@ -25,8 +25,8 @@ fn reference_link2() {
         Document {
             blocks: vec![Block::Paragraph(vec![Inline::LinkReference(
                 LinkReference {
-                    label: "text".to_owned(),
-                    text: "text".to_owned()
+                    label: vec![Inline::Text("text".to_owned())],
+                    text: vec![Inline::Text("text".to_owned())]
                 }
             )])],
         }
@@ -41,8 +41,8 @@ fn reference_link3() {
         Document {
             blocks: vec![Block::Paragraph(vec![Inline::LinkReference(
                 LinkReference {
-                    label: "text".to_owned(),
-                    text: "text".to_owned()
+                    label: vec![Inline::Text("text".to_owned())],
+                    text: vec![Inline::Text("text".to_owned())]
                 }
             )])],
         }

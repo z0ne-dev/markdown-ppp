@@ -206,8 +206,8 @@ pub enum CodeBlockKind {
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct LinkDefinition {
-    /// Normalized label (acts as the *identifier*).
-    pub label: String,
+    /// Link label (acts as the *identifier*).
+    pub label: Vec<Inline>,
 
     /// Link URL (absolute or relative) or email address.
     pub destination: String,
@@ -239,13 +239,14 @@ pub type TableRow = Vec<TableCell>;
 pub type TableCell = Vec<Inline>;
 
 /// Specifies the alignment of a table cell.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 #[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Alignment {
     /// No alignment specified
     None,
 
     /// Left aligned
+    #[default]
     Left,
 
     /// Right aligned
@@ -331,9 +332,9 @@ pub struct Link {
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct LinkReference {
-    /// Normalized label (acts as the *identifier*).
-    pub label: String,
+    /// Link label (acts as the *identifier*).
+    pub label: Vec<Inline>,
 
     /// Link text
-    pub text: String,
+    pub text: Vec<Inline>,
 }
