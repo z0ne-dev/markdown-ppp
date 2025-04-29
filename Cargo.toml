@@ -14,10 +14,15 @@ readme = "README.md"
 [dependencies]
 entities = { version = "1.0.1", optional = true }
 nom = { version = "8.0.0", default-features = false, features = ["alloc"], optional = true }
+pretty = { version = "0.12.4", optional = true }
 serde = { version = "1.0.219", features = ["serde_derive"], optional = true }
 unicode_categories = { version = "0.1.1", optional = true }
 
+[dev-dependencies]
+rstest = "0.25"
+
 [features]
-default = ["parser"]
+default = ["parser", "printer"]
 parser = ["entities", "nom", "unicode_categories"]
 ast-serde = ["serde"]
+printer = ["pretty"]
