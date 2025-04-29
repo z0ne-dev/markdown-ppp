@@ -196,6 +196,29 @@ fn list9() {
 }
 
 #[test]
+fn list10() {
+    let doc = parse_markdown(MarkdownParserState::default(), " * list1\n * list1").unwrap();
+    assert_eq!(
+        doc,
+        Document {
+            blocks: vec![Block::List(List {
+                kind: ListKind::Bullet(ListBulletKind::Star),
+                items: vec![
+                    ListItem {
+                        task: None,
+                        blocks: vec![Block::Paragraph(vec![Inline::Text("list1".to_owned())])]
+                    },
+                    ListItem {
+                        task: None,
+                        blocks: vec![Block::Paragraph(vec![Inline::Text("list1".to_owned())])]
+                    }
+                ]
+            })]
+        },
+    );
+}
+
+#[test]
 fn task_list1() {
     let doc = parse_markdown(MarkdownParserState::default(), " - [ ] a").unwrap();
     assert_eq!(

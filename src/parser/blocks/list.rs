@@ -143,8 +143,7 @@ fn list_item_rest_line(
                     (),
                     crate::parser::blocks::thematic_break::thematic_break(state.clone()),
                 ),
-                // value((), list_marker_with_span_size),
-                value((), marker_parser),
+                value((), (many_m_n(0, prefix_length, char(' ')), marker_parser)),
             )))),
             alt((
                 // If starts with 0 <= prefix_length spaces
