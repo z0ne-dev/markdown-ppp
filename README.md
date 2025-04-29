@@ -93,11 +93,9 @@ This allows you to control how certain Markdown elements are parsed or ignored.
 
 ---
 
-## 🧩 Customizing the Parsing Behavior
+## 🧩 Customizing the parsing behavior
 
 You can control how individual Markdown elements are parsed at a fine-grained level using the [`MarkdownParserConfig`](https://docs.rs/markdown-ppp/latest/markdown_ppp/parser/config/struct.MarkdownParserConfig.html) API.
-
-### Element Behavior Configuration how individual Markdown elements are parsed at a fine-grained level using the [`MarkdownParserConfig`](https://docs.rs/markdown-ppp/latest/markdown_ppp/parser/config/struct.MarkdownParserConfig.html) API.
 
 Each element type (block-level or inline-level) can be configured with an `ElementBehavior`:
 
@@ -136,7 +134,7 @@ let ast = parse_markdown(MarkdownParserState::with_config(config), input)?;
 
 This mechanism allows you to override, filter, or completely redefine how each Markdown element is treated during parsing, giving you deep control over the resulting AST.
 
-### Registering Custom Parsers
+### Registering custom parsers
 
 You can also register your own custom block-level or inline-level parsers by providing parser functions via configuration. These parsers are executed before the built-in ones and can be used to support additional syntax or override behavior.
 
@@ -180,11 +178,11 @@ let custom_inline: CustomInlineParserFn = Rc::new(RefCell::new(Box::new(|input: 
 let config = config.with_custom_inline_parser(custom_inline);
 ```
 
-This extensibility allows you to integrate domain-specific syntax and behaviors into the Markdown parser while reusing the base logic and AST structure provided by `markdown-ppp`., filter, or completely redefine how each Markdown element is treated during parsing, giving you deep control over the resulting AST.
+This extensibility allows you to integrate domain-specific syntax and behaviors into the Markdown parser while reusing the base logic and AST structure provided by `markdown-ppp`., filter, or completely redefine how each Markdown element is treated during parsing.
 
 ---
 
-## 📄 AST Structure
+## 📄 AST structure
 
 The complete Markdown Abstract Syntax Tree (AST) is defined inside the module `markdown_ppp::ast`.
 
@@ -193,19 +191,69 @@ The `Document` struct represents the root node, and from there you can traverse 
 
 You can use the AST independently without the parsing functionality by disabling default features.
 
+## 🖨️ Pretty-printing (AST → Markdown)
+
+You can convert an AST (`Document`) back into a formatted Markdown string using the `render_markdown` function from the `printer` module.
+
+This feature is enabled by default via the `printer` feature.
+
+### Basic example
+
+```rust
+use markdown_ppp::printer::render_markdown;
+use markdown_ppp::printer::config::Config;
+use markdown_ppp::ast::Document;
+
+// Assume you already have a parsed or constructed Document
+let document = Document::default();
+
+// Render it back to a Markdown string with default configuration
+let markdown_output = render_markdown(&document, Config::default());
+
+println!("{}", markdown_output);
+```
+
+This will format the Markdown with a default line width of 80 characters.
+
+### Customizing output width
+
+You can control the maximum width of lines in the generated Markdown by customizing the Config:
+
+```rust
+use markdown_ppp::printer::render_markdown;
+use markdown_ppp::printer::config::Config;
+use markdown_ppp::ast::Document;
+
+// Set a custom maximum width, e.g., 120 characters
+let config = Config::default().with_width(120);
+
+let markdown_output = render_markdown(&Document::default(), config);
+
+println!("{}", markdown_output);
+```
+
+This is useful if you want to control wrapping behavior or generate more compact or expanded Markdown documents.
+
 ---
 
-## 🔧 Optional Features
+## 🔧 Optional features
 
 | Feature         | Description                                                        |
 |:----------------|:-------------------------------------------------------------------|
 | `parser`        | Enables Markdown parsing support. Enabled by default.              |
+| `printer`       | Enables AST → Markdown string conversion. Enabled by default.      |
 | `ast-serde`     | Adds `Serialize` and `Deserialize` traits to all AST types via `serde`. Disabled by default. |
 
 If you only need the AST types without parsing functionality, you can add the crate without default features:
 
 ```bash
 cargo add --no-default-features markdown-ppp
+```
+
+If you want to disable Markdown generation (AST → Markdown string conversion), disable the `printer` feature manually:
+
+```bash
+cargo add markdown-ppp --no-default-features --features parser
 ```
 
 ---
