@@ -110,6 +110,20 @@ heading 3
 > | ----------- | ----------: | :---------: |
 > | Ячейка 1    |    Ячейка 2 |  Ячейка 3   |
 > | Ячейка 4    |    Ячейка 5 |  Ячейка 6   |"#),
+        case(
+            r#"> blockquote level 1
+> 
+> > blockquote level 2"#),
+        case(
+            r#"text
+
+```rust
+let s = "hello\n";
+
+```"#),
+
+        case(
+            r#"Autolinks test: <http://example.com> and <johnlepikhin@gmail.com>"#),
 
 )]
 fn symmetric_round_trip(input: &str) {
