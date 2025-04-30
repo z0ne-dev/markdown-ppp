@@ -1,6 +1,6 @@
 mod block;
 mod blockquote;
-mod config;
+pub mod config;
 mod heading;
 mod inline;
 mod list;
