@@ -261,6 +261,7 @@ cargo add markdown-ppp --no-default-features --features parser
 ## 📚 Documentation
 
 - [API Docs on docs.rs](https://docs.rs/markdown-ppp)
+- [AI-generated documentation](https://deepwiki.com/johnlepikhin/markdown-ppp)
 
 ---
 
