@@ -126,7 +126,7 @@ fn split_with_spaces(s: &str) -> Vec<Option<&str>> {
                 result.push(Some(&s[start..i]));
                 word_start = None;
             }
-            if result.last().map_or(true, |x| x.is_some()) {
+            if result.last().is_none_or(|x| x.is_some()) {
                 result.push(None);
             }
         } else if word_start.is_none() {

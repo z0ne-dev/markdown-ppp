@@ -104,13 +104,13 @@ fn open_tag(tag_value: &'static str) -> impl FnMut(&str) -> IResult<&str, ()> {
 }
 
 fn can_open(marker: char, next: Option<char>) -> bool {
-    let left_flanking = next.map_or(false, |c| !c.is_whitespace())
-        && (next.map_or(false, |c| !is_punctuation(c)) || (next.map_or(false, is_punctuation)));
+    let left_flanking = next.is_some_and(|c| !c.is_whitespace())
+        && (next.is_some_and(|c| !is_punctuation(c)) || (next.is_some_and(is_punctuation)));
     if !left_flanking {
         return false;
     }
     if marker == '_' {
-        let right_flanking = next.map_or(true, |c| c.is_whitespace() || is_punctuation(c));
+        let right_flanking = next.is_none_or(|c| c.is_whitespace() || is_punctuation(c));
         return !right_flanking;
     }
     true
@@ -129,16 +129,16 @@ fn close_tag(tag_value: &'static str) -> impl FnMut(&str) -> IResult<&str, ()> {
 }
 
 fn can_close(marker: char, next: Option<char>) -> bool {
-    let right_flanking = next.map_or(true, |c| c.is_whitespace() || is_punctuation(c));
+    let right_flanking = next.is_none_or(|c| c.is_whitespace() || is_punctuation(c));
     if !right_flanking {
         return false;
     }
 
     if marker == '_' {
-        let left_flanking = next.map_or(false, |c| !c.is_whitespace())
-            && (next.map_or(false, |c| !is_punctuation(c)))
-            || (next.map_or(false, is_punctuation));
-        return !left_flanking || next.map_or(false, is_punctuation);
+        let left_flanking = next.is_some_and(|c| !c.is_whitespace())
+            && (next.is_some_and(|c| !is_punctuation(c)))
+            || (next.is_some_and(is_punctuation));
+        return !left_flanking || next.is_some_and(is_punctuation);
     }
     true
 }
