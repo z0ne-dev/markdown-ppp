@@ -36,10 +36,17 @@ impl<'a> ToDoc<'a> for List {
                 }
             };
 
+            let task_list_marker = match item.task {
+                Some(TaskState::Complete) => arena.text("[X]").append(arena.space()),
+                Some(TaskState::Incomplete) => arena.text("[ ]").append(arena.space()),
+                None => arena.nil(),
+            };
+
             arena
                 .space()
                 .append(arena.text(marker.clone()))
                 .append(arena.space())
+                .append(task_list_marker)
                 .append(
                     item.blocks
                         .to_doc(config.clone(), arena)
