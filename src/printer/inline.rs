@@ -106,9 +106,9 @@ impl<'a> ToDocInline<'a> for Inline {
                 }
                 arena
                     .text("[")
-                    .append(v.label.to_doc_inline(allow_newlines, arena))
-                    .append("][")
                     .append(v.text.to_doc_inline(allow_newlines, arena))
+                    .append("][")
+                    .append(v.label.to_doc_inline(allow_newlines, arena))
                     .append(arena.text("]"))
             }
         }
