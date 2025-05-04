@@ -11,7 +11,7 @@ use crate::ast::*;
 use pretty::{Arena, DocBuilder};
 use std::rc::Rc;
 
-/// Функция, которую вы вызываете, чтобы получить Markdown-строку из AST.
+/// Render Markdown AST to Markdown document.
 pub fn render_markdown(ast: &Document, config: crate::printer::config::Config) -> String {
     let config = Rc::new(config);
     let arena = Arena::new();
@@ -22,7 +22,6 @@ pub fn render_markdown(ast: &Document, config: crate::printer::config::Config) -
     String::from_utf8(buf).unwrap()
 }
 
-/// Трейт, который конвертирует наши AST-узлы в pretty::Doc
 trait ToDoc<'a> {
     fn to_doc(
         &self,
@@ -31,7 +30,6 @@ trait ToDoc<'a> {
     ) -> DocBuilder<'a, Arena<'a>, ()>;
 }
 
-/// Реализация для корня Document: просто склеиваем все блоки швом из двух переносов строки.
 impl<'a> ToDoc<'a> for Document {
     fn to_doc(
         &self,
