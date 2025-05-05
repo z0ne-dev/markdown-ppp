@@ -18,7 +18,7 @@ pub(crate) struct State<'a> {
     link_definitions: HashMap<Vec<Inline>, LinkDefinition>,
 }
 
-impl<'a> State<'a> {
+impl State<'_> {
     pub fn new(config: crate::html_printer::config::Config, ast: &Document) -> Self {
         let (footnote_index, link_definitions) = crate::html_printer::index::get_indicies(ast);
         let arena = Arena::new();
