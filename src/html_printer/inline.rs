@@ -34,12 +34,17 @@ impl<'a> ToDoc<'a> for Inline {
                 }
                 tag(state, "a", attributes, children.to_doc(state))
             }
-            Inline::Image(Link {
-                destination, title, ..
+            Inline::Image(Image {
+                destination,
+                title,
+                alt,
             }) => {
-                let mut attributes = vec![("href".to_owned(), escape(destination))];
+                let mut attributes = vec![
+                    ("src".to_owned(), escape(destination)),
+                    ("alt".to_owned(), escape(alt)),
+                ];
                 if let Some(title) = title {
-                    attributes.push(("alt".to_owned(), escape(title)))
+                    attributes.push(("title".to_owned(), escape(title)))
                 }
                 tag(state, "img", attributes, state.arena.nil())
             }

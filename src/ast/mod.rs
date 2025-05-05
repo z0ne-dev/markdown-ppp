@@ -296,7 +296,7 @@ pub enum Inline {
     LinkReference(LinkReference),
 
     /// Image with optional title.
-    Image(Link),
+    Image(Image),
 
     /// Emphasis (`*` / `_`)
     Emphasis(Vec<Inline>),
@@ -327,6 +327,20 @@ pub struct Link {
 
     /// Inline content (text, code, etc.) inside the link or image.
     pub children: Vec<Inline>,
+}
+
+/// Re‑usable structure for links and images (destination + children).
+#[derive(Debug, Clone, PartialEq, Hash, Eq)]
+#[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Image {
+    /// Image URL (absolute or relative).
+    pub destination: String,
+
+    /// Optional title.
+    pub title: Option<String>,
+
+    /// Alternative text.
+    pub alt: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]

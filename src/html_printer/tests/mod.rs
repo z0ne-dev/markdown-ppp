@@ -26,6 +26,10 @@ use rstest::rstest;
     "Hello[^1]\n\n[^1]: This is a footnote.",
     "<p>Hello<a class=\"markdown-footnote-reference\" href=\"#1\">[1]</a></p><div class=\"markdown-footnote-definition\"><span class=\"markdown-footnote-definition-index\">1. </span><span class=\"markdown-footnote-definition-content\"><p>This is a footnote.</p></span></div>"
 )]
+#[case(
+    "![alt text](https://example.com/image.png)",
+    "<p><img src=\"https://example.com/image.png\" alt=\"alt text\"></img></p>"
+)]
 fn render_to_html(#[case] input: &str, #[case] expected: &str) {
     let config = crate::html_printer::config::Config::default();
     let ast = crate::parser::parse_markdown(crate::parser::MarkdownParserState::default(), input)

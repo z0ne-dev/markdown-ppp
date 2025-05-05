@@ -79,20 +79,22 @@ impl<'a> ToDocInline<'a> for Inline {
                     .append(title)
                     .append(")")
             }
-            Inline::Image(Link {
+            Inline::Image(Image {
                 destination,
                 title,
-                children,
+                alt,
             }) => {
-                let mut d = arena.text("![");
-                for ch in children {
-                    d = d.append(ch.to_doc_inline(allow_newlines, arena));
-                }
                 let title_part = title
                     .as_ref()
                     .map(|t| format!(" \"{}\"", t))
                     .unwrap_or_default();
-                d.append(arena.text(format!("]({}{})", destination, title_part)))
+                arena
+                    .text("![")
+                    .append(arena.text(alt.clone()))
+                    .append("](")
+                    .append(arena.text(destination.clone()))
+                    .append(arena.text(title_part))
+                    .append(arena.text(")"))
             }
             Inline::Autolink(link) => arena.text(format!("<{}>", link)),
             Inline::FootnoteReference(label) => arena.text(format!("[^{}]", label)),

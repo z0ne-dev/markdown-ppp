@@ -7,10 +7,10 @@ fn image1() {
     assert_eq!(
         doc,
         Document {
-            blocks: vec![Block::Paragraph(vec![Inline::Image(Link {
+            blocks: vec![Block::Paragraph(vec![Inline::Image(Image {
                 destination: "/url".to_owned(),
                 title: Some("title".to_owned()),
-                children: vec![Inline::Text("foo".to_owned())]
+                alt: "foo".to_owned(),
             })])]
         }
     );
@@ -22,10 +22,10 @@ fn image2() {
     assert_eq!(
         doc,
         Document {
-            blocks: vec![Block::Paragraph(vec![Inline::Image(Link {
+            blocks: vec![Block::Paragraph(vec![Inline::Image(Image {
                 destination: "train.jpg".to_owned(),
                 title: None,
-                children: vec![Inline::Text("foo".to_owned())]
+                alt: "foo".to_owned(),
             })])]
         }
     );
@@ -37,10 +37,10 @@ fn image3() {
     assert_eq!(
         doc,
         Document {
-            blocks: vec![Block::Paragraph(vec![Inline::Image(Link {
+            blocks: vec![Block::Paragraph(vec![Inline::Image(Image {
                 destination: "url".to_owned(),
                 title: None,
-                children: vec![Inline::Text("foo".to_owned())]
+                alt: "foo".to_owned(),
             })])]
         }
     );
