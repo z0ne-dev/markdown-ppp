@@ -18,6 +18,14 @@ use rstest::rstest;
 )]
 #[case("`code`", "<p><code>code</code></p>")]
 #[case("```rust\nfn main() {}\n```", "<pre><code>fn main() {}</code></pre>")]
+#[case(
+    "[Google][1]\n\n[1]: https://www.google.com 'Search engine'",
+    "<p><a href=\"https://www.google.com\" title=\"Search engine\">Google</a></p>"
+)]
+#[case(
+    "Hello[^1]\n\n[^1]: This is a footnote.",
+    "<p>Hello<a class=\"markdown-footnote-reference\" href=\"#1\">[1]</a></p><div class=\"markdown-footnote-definition\"><span class=\"markdown-footnote-definition-index\">1. </span><span class=\"markdown-footnote-definition-content\"><p>This is a footnote.</p></span></div>"
+)]
 fn render_to_html(#[case] input: &str, #[case] expected: &str) {
     let config = crate::html_printer::config::Config::default();
     let ast = crate::parser::parse_markdown(crate::parser::MarkdownParserState::default(), input)

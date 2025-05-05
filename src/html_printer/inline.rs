@@ -73,12 +73,12 @@ impl<'a> ToDoc<'a> for Inline {
                     Some(v) => v,
                     None => return state.arena.nil(),
                 };
-                tag(
-                    state,
-                    "a",
-                    vec![("href".to_owned(), escape(definition.destination.as_str()))],
-                    v.text.to_doc(state),
-                )
+                let mut attributes =
+                    vec![("href".to_owned(), escape(definition.destination.as_str()))];
+                if let Some(title) = &definition.title {
+                    attributes.push(("title".to_owned(), escape(title)))
+                }
+                tag(state, "a", attributes, v.text.to_doc(state))
             }
         }
     }
