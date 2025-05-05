@@ -274,7 +274,7 @@ pub struct FootnoteDefinition {
 // Inline‑level nodes
 // ——————————————————————————————————————————————————————————————————————————
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq)]
 #[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Inline {
     /// Plain text (decoded entity references, preserved backslash escapes).
@@ -316,7 +316,7 @@ pub enum Inline {
 }
 
 /// Re‑usable structure for links and images (destination + children).
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq)]
 #[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Link {
     /// Destination URL (absolute or relative) or email address.
@@ -329,7 +329,7 @@ pub struct Link {
     pub children: Vec<Inline>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Hash, Eq)]
 #[cfg_attr(feature = "ast-serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct LinkReference {
     /// Link label (acts as the *identifier*).

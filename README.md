@@ -10,6 +10,7 @@ It provides a clean, well-structured Abstract Syntax Tree (AST) for parsed docum
 
 - **Markdown Parsing** — Full Markdown parsing support with strict AST structure.
 - **Pretty-printing and processing** — Build, modify, and reformat Markdown easily.
+- **Render to HTML** — Convert Markdown AST to HTML.
 - **Modular design** — You can disable parsing entirely and use only the AST types.
 
 ---
@@ -234,6 +235,26 @@ println!("{}", markdown_output);
 
 This is useful if you want to control wrapping behavior or generate more compact or expanded Markdown documents.
 
+## 🖨️ Pretty-printing (AST → HTML)
+
+You can convert an AST (`Document`) back into a formatted HTML string using the `render_html` function from the `html_printer` module.
+
+This feature is enabled by default via the `html-printer` feature.
+
+### Basic example
+
+```rust
+use markdown_ppp::html_printer::render_html;
+use markdown_ppp::html_printer::config::Config;
+use markdown_ppp::ast::Document;
+
+let config = Config::default();
+let ast = crate::parser::parse_markdown(crate::parser::MarkdownParserState::default(), "# Hello, World!")
+    .unwrap();
+
+println!("{}", render_html(&ast, config));
+```
+
 ---
 
 ## 🔧 Optional features
@@ -242,6 +263,7 @@ This is useful if you want to control wrapping behavior or generate more compact
 |:----------------|:-------------------------------------------------------------------|
 | `parser`        | Enables Markdown parsing support. Enabled by default.              |
 | `printer`       | Enables AST → Markdown string conversion. Enabled by default.      |
+| `html-printer`  | Enables AST → HTML string conversion. Enabled by default.          |
 | `ast-serde`     | Adds `Serialize` and `Deserialize` traits to all AST types via `serde`. Disabled by default. |
 
 If you only need the AST types without parsing functionality, you can add the crate without default features:

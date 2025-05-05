@@ -22,7 +22,8 @@ unicode_categories = { version = "0.1.1", optional = true }
 rstest = "0.25"
 
 [features]
-default = ["parser", "printer"]
+default = ["parser", "printer", "html-printer"]
 parser = ["entities", "nom", "unicode_categories"]
 ast-serde = ["serde"]
 printer = ["pretty"]
+html-printer = ["pretty"]
