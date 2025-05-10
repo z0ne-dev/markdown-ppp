@@ -30,6 +30,13 @@ use rstest::rstest;
     "![alt text](https://example.com/image.png)",
     "<p><img src=\"https://example.com/image.png\" alt=\"alt text\"></img></p>"
 )]
+#[case(
+    "| Header 1 | Header 2 |
+| --- | --: |
+| Row 1 Col 1 | Row 1 Col 2 |
+| Row 2 Col 1 | Col 2       |",
+    "<table><thead><tr><th class=\"markdown-table-align-left\">Header 1</th><th class=\"markdown-table-align-right\">Header 2</th></tr></thead><tbody><tr><td class=\"markdown-table-align-left\">Row 1 Col 1</td><td class=\"markdown-table-align-right\">Row 1 Col 2</td></tr><tr><td class=\"markdown-table-align-left\">Row 2 Col 1</td><td class=\"markdown-table-align-right\">Col 2</td></tr></tbody></table>"
+)]
 fn render_to_html(#[case] input: &str, #[case] expected: &str) {
     let config = crate::html_printer::config::Config::default();
     let ast = crate::parser::parse_markdown(crate::parser::MarkdownParserState::default(), input)

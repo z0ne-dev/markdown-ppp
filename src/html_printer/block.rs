@@ -141,13 +141,16 @@ impl<'a> ToDoc<'a> for CodeBlock {
 
 impl<'a> ToDoc<'a> for Table {
     fn to_doc(&self, state: &'a crate::html_printer::State<'a>) -> DocBuilder<'a, Arena<'a>, ()> {
-        let first_row = self.rows.first().unwrap();
-        let mut acc = table_row_to_doc(state, first_row, "th", &self.alignments);
+        let first_row = table_row_to_doc(state, self.rows.first().unwrap(), "th", &self.alignments);
+        let mut acc = state.arena.nil();
         for row in self.rows.iter().skip(1) {
             acc = acc.append(table_row_to_doc(state, row, "td", &self.alignments));
         }
 
-        tag(state, "table", Vec::new(), acc)
+        let content =
+            tag(state, "thead", Vec::new(), first_row).append(tag(state, "tbody", Vec::new(), acc));
+
+        tag(state, "table", Vec::new(), content)
     }
 }
 
