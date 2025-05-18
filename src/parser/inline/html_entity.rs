@@ -7,15 +7,14 @@ use nom::{
     sequence::{delimited, preceded},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn html_entity(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&str) -> IResult<&str, String> {
     move |input: &str| alt((html_entity_alpha(state.clone()), html_entity_numeric)).parse(input)
 }
 
-fn html_entity_alpha(state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, String> {
+fn html_entity_alpha(state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, String> {
     move |input: &str| {
         map_opt(recognize((char('&'), alpha1, char(';'))), |s: &str| {
             state

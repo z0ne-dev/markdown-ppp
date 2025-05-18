@@ -1,18 +1,17 @@
 use nom::IResult;
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 /// Function type for mapping elements.
-type ElementMapFn<ELT> = Rc<RefCell<Box<dyn FnMut(ELT) -> ELT>>>;
+type ElementMapFn<ELT> = crate::Xrc<RefCell<Box<dyn FnMut(ELT) -> ELT>>>;
 
 /// Function type for custom block parsers.
 type CustomBlockParserFn =
-    Rc<RefCell<Box<dyn for<'a> FnMut(&'a str) -> IResult<&'a str, crate::ast::Block>>>>;
+    crate::Xrc<RefCell<Box<dyn for<'a> FnMut(&'a str) -> IResult<&'a str, crate::ast::Block>>>>;
 
 /// Function type for custom inline parsers.
 type CustomInlineParserFn =
-    Rc<RefCell<Box<dyn for<'a> FnMut(&'a str) -> IResult<&'a str, crate::ast::Inline>>>>;
+    crate::Xrc<RefCell<Box<dyn for<'a> FnMut(&'a str) -> IResult<&'a str, crate::ast::Inline>>>>;
 
 /// Behavior of the parser when encountering certain elements.
 #[derive(Clone)]

@@ -2,13 +2,12 @@ use crate::ast::*;
 use crate::parser::{parse_markdown, MarkdownParserState};
 use nom::combinator::value;
 use std::cell::RefCell;
-use std::rc::Rc;
 
 #[test]
 fn custom_parser1() {
     use nom::Parser;
     let config = crate::parser::config::MarkdownParserConfig::default().with_custom_block_parser(
-        Rc::new(RefCell::new(Box::new(|input: &str| {
+        crate::Xrc::new(RefCell::new(Box::new(|input: &str| {
             value(Block::ThematicBreak, nom::bytes::complete::tag("///")).parse(input)
         }))),
     );

@@ -11,10 +11,9 @@ use nom::{
     sequence::{delimited, preceded, terminated},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn table<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Table> {
     move |input: &'a str| {
         let (input, header) = parse_table_row(state.clone()).parse(input)?;
@@ -41,7 +40,7 @@ pub(crate) fn table<'a>(
 }
 
 fn parse_table_data_rows<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
     col_count: usize,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<TableRow>> {
     move |input: &'a str| {
@@ -100,7 +99,7 @@ fn parse_alignment_row(input: &str) -> IResult<&str, Vec<Alignment>> {
 }
 
 fn parse_table_row<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, TableRow> {
     move |input: &'a str| {
         line_terminated(preceded(
@@ -116,7 +115,7 @@ fn parse_table_row<'a>(
 }
 
 fn cell_content<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<Inline>> {
     move |input: &'a str| {
         let (input, chars) = many1(preceded(

@@ -1,12 +1,11 @@
 use crate::ast::*;
 use crate::printer::{inline::ToDocInline, ToDoc};
 use pretty::{Arena, DocAllocator, DocBuilder};
-use std::rc::Rc;
 
 impl<'a> ToDoc<'a> for Heading {
     fn to_doc(
         &self,
-        _config: Rc<crate::printer::config::Config>,
+        _config: crate::Xrc<crate::printer::config::Config>,
         arena: &'a Arena<'a>,
     ) -> DocBuilder<'a, Arena<'a>, ()> {
         match self.kind {

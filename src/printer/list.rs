@@ -1,12 +1,11 @@
 use crate::ast::*;
 use crate::printer::ToDoc;
 use pretty::{Arena, DocAllocator, DocBuilder};
-use std::rc::Rc;
 
 impl<'a> ToDoc<'a> for List {
     fn to_doc(
         &self,
-        config: Rc<crate::printer::config::Config>,
+        config: crate::Xrc<crate::printer::config::Config>,
         arena: &'a Arena<'a>,
     ) -> DocBuilder<'a, Arena<'a>, ()> {
         let mut counter = if let ListKind::Ordered(v) = &self.kind {

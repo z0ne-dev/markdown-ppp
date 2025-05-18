@@ -10,10 +10,9 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn link_definition<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, LinkDefinition> {
     move |input: &'a str| {
         let mut one_line_whitespace0 = (space0, opt(line_ending), space0);

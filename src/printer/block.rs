@@ -1,12 +1,11 @@
 use crate::ast::*;
 use crate::printer::{inline::ToDocInline, ToDoc};
 use pretty::{Arena, DocAllocator, DocBuilder};
-use std::rc::Rc;
 
 impl<'a> ToDoc<'a> for Vec<Block> {
     fn to_doc(
         &self,
-        config: Rc<crate::printer::config::Config>,
+        config: crate::Xrc<crate::printer::config::Config>,
         arena: &'a Arena<'a>,
     ) -> DocBuilder<'a, Arena<'a>, ()> {
         let mut acc = arena.nil();
@@ -24,7 +23,7 @@ impl<'a> ToDoc<'a> for Vec<Block> {
 impl<'a> ToDoc<'a> for Vec<&Block> {
     fn to_doc(
         &self,
-        config: Rc<crate::printer::config::Config>,
+        config: crate::Xrc<crate::printer::config::Config>,
         arena: &'a Arena<'a>,
     ) -> DocBuilder<'a, Arena<'a>, ()> {
         let mut acc = arena.nil();
@@ -43,7 +42,7 @@ impl<'a> ToDoc<'a> for Vec<&Block> {
 impl<'a> ToDoc<'a> for Block {
     fn to_doc(
         &self,
-        config: Rc<crate::printer::config::Config>,
+        config: crate::Xrc<crate::printer::config::Config>,
         arena: &'a Arena<'a>,
     ) -> DocBuilder<'a, Arena<'a>, ()> {
         match self {

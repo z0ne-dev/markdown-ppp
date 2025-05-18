@@ -7,7 +7,7 @@ mod util;
 
 use crate::ast::*;
 use pretty::{Arena, DocBuilder};
-use std::{collections::HashMap, rc::Rc};
+use std::collections::HashMap;
 
 pub(crate) struct State<'a> {
     arena: Arena<'a>,
@@ -41,7 +41,7 @@ impl State<'_> {
 
 /// Render the given Markdown AST to HTML.
 pub fn render_html(ast: &Document, config: crate::html_printer::config::Config) -> String {
-    let state = Rc::new(State::new(config, ast));
+    let state = crate::Xrc::new(State::new(config, ast));
     let doc = ast.to_doc(&state);
 
     let mut buf = Vec::new();

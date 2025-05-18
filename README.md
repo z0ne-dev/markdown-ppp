@@ -55,13 +55,12 @@ Example:
 ```rust
 use markdown_ppp::parse::parse_markdown;
 use markdown_ppp::ast::Document;
-use std::rc::Rc;
 
 fn main() {
     let state = markdown_ppp::parse::MarkdownParserState::new();
     let input = "# Hello, World!";
 
-    match parse_markdown(Rc::new(state), input) {
+    match parse_markdown(state, input) {
         Ok(document) => {
             println!("Parsed document: {:?}", document);
         }
@@ -152,7 +151,7 @@ use markdown_ppp::ast::Block;
 use std::{rc::Rc, cell::RefCell};
 use nom::IResult;
 
-let custom_block: CustomBlockParserFn = Rc::new(RefCell::new(Box::new(|input: &str| {
+let custom_block: CustomBlockParserFn = crate::X::new(RefCell::new(Box::new(|input: &str| {
     if input.starts_with("::note") {
         let block = Block::Paragraph(vec!["This is a note block".into()]);
         Ok(("", block))
@@ -173,7 +172,7 @@ use markdown_ppp::ast::Inline;
 use std::{rc::Rc, cell::RefCell};
 use nom::IResult;
 
-let custom_inline: CustomInlineParserFn = Rc::new(RefCell::new(Box::new(|input: &str| {
+let custom_inline: CustomInlineParserFn = crate::X::new(RefCell::new(Box::new(|input: &str| {
     if input.starts_with("@@") {
         Ok((&input[2..], Inline::Text("custom-inline".into())))
     } else {

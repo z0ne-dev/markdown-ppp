@@ -2,10 +2,9 @@ use crate::ast::{Inline, LinkReference};
 use crate::parser::link_util::link_label;
 use crate::parser::MarkdownParserState;
 use nom::{branch::alt, bytes::complete::tag, sequence::terminated, IResult, Parser};
-use std::rc::Rc;
 
 pub(crate) fn reference_link<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
         alt((
@@ -18,7 +17,7 @@ pub(crate) fn reference_link<'a>(
 }
 
 pub(crate) fn reference_link_full<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
         let (input, (text, label)) =
@@ -29,7 +28,7 @@ pub(crate) fn reference_link_full<'a>(
 }
 
 pub(crate) fn reference_link_collapsed<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
         let (input, text) = terminated(link_label(state.clone()), tag("[]")).parse(input)?;
@@ -42,7 +41,7 @@ pub(crate) fn reference_link_collapsed<'a>(
 }
 
 pub(crate) fn reference_link_shortcut<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
         let (input, text) = link_label(state.clone()).parse(input)?;

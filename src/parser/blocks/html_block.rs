@@ -10,10 +10,9 @@ use nom::{
     sequence::{delimited, pair, preceded, terminated},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn html_block(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&str) -> IResult<&str, &str> {
     move |input: &str| {
         alt((
@@ -29,7 +28,7 @@ pub(crate) fn html_block(
     }
 }
 
-fn html_block1(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
+fn html_block1(_state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
     move |input: &str| {
         let tag_variant_parser = || {
             alt((
@@ -59,7 +58,7 @@ fn html_block1(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&
     }
 }
 
-fn html_block2(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
+fn html_block2(_state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
     move |input: &str| {
         preceded(
             many_m_n(0, 3, char(' ')),
@@ -73,7 +72,7 @@ fn html_block2(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&
     }
 }
 
-fn html_block3(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
+fn html_block3(_state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
     move |input: &str| {
         preceded(
             many_m_n(0, 3, char(' ')),
@@ -87,7 +86,7 @@ fn html_block3(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&
     }
 }
 
-fn html_block4(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
+fn html_block4(_state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
     move |input: &str| {
         preceded(
             many_m_n(0, 3, char(' ')),
@@ -102,7 +101,7 @@ fn html_block4(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&
     }
 }
 
-fn html_block5(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
+fn html_block5(_state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
     move |input: &str| {
         preceded(
             many_m_n(0, 3, char(' ')),
@@ -116,7 +115,7 @@ fn html_block5(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&
     }
 }
 
-fn html_block6(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
+fn html_block6(_state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
     move |input: &str| {
         let tag_variant = alt((
             alt((
@@ -218,7 +217,7 @@ fn html_block6(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&
     }
 }
 
-fn html_block7(_state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
+fn html_block7(_state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, &str> {
     move |input: &str| {
         let end_parser = || {
             alt((

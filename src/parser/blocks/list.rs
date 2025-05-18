@@ -9,7 +9,6 @@ use nom::{
     sequence::{delimited, preceded, terminated},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 fn list_item_task_state(input: &str) -> IResult<&str, TaskState> {
     delimited(
@@ -117,7 +116,7 @@ pub(crate) fn list_marker_with_span_size(
 }
 
 fn list_item_rest_line(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
     list_kind: ListKind,
     prefix_length: usize,
 ) -> impl FnMut(&str) -> IResult<&str, Vec<&str>> {
@@ -169,7 +168,7 @@ fn list_item_rest_line(
 }
 
 fn list_item_lines(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
     list_kind: ListKind,
     prefix_length: usize,
 ) -> impl FnMut(&str) -> IResult<&str, Vec<Vec<&str>>> {
@@ -184,7 +183,7 @@ fn list_item_lines(
 }
 
 pub(crate) fn list_item(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&str) -> IResult<&str, (ListKind, ListItem)> {
     move |input: &str| {
         let (input, (list_kind, item_prefix_length, task_state, first_line)) =
@@ -217,7 +216,7 @@ pub(crate) fn list_item(
 }
 
 pub(crate) fn list(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&str) -> IResult<&str, crate::ast::List> {
     move |input: &str| {
         let (input, items) = many1(list_item(state.clone())).parse(input)?;

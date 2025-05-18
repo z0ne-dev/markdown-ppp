@@ -7,12 +7,11 @@ use nom::{
     sequence::{delimited, preceded},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 use super::MarkdownParserState;
 
 pub(crate) fn link_label<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<crate::ast::Inline>> {
     move |input: &'a str| {
         delimited(tag("["), link_label_inner(state.clone()), tag("]")).parse(input)
@@ -20,7 +19,7 @@ pub(crate) fn link_label<'a>(
 }
 
 fn link_label_inner<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<crate::ast::Inline>> {
     move |input: &'a str| {
         let (input, label_chars) = verify(

@@ -18,10 +18,9 @@ use crate::parser::MarkdownParserState;
 use nom::branch::alt;
 use nom::combinator::fail;
 use nom::{combinator::map, sequence::preceded, IResult, Parser};
-use std::rc::Rc;
 
 pub(crate) fn block<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Block> {
     move |input: &'a str| {
         preceded(
@@ -112,7 +111,7 @@ pub(crate) fn block<'a>(
 }
 
 pub(crate) fn custom_parser(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&str) -> IResult<&str, Block> {
     move |input: &str| {
         if let Some(custom_parser) = state.config.custom_block_parser.as_ref() {

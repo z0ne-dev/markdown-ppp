@@ -9,10 +9,9 @@ use nom::{
     sequence::{delimited, preceded},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn emphasis(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&str) -> IResult<&str, Inline> {
     move |input: &str| {
         alt((
@@ -67,7 +66,7 @@ pub(crate) fn emphasis(
 }
 
 fn emphasis_content<'a, P>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
     mut close_tag: P,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<Inline>>
 where

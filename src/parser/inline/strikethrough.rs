@@ -9,10 +9,9 @@ use nom::{
     sequence::{preceded, terminated},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn strikethrough<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
         let (input, _) = terminated(tag("~~"), peek(not(char('~')))).parse(input)?;

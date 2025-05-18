@@ -8,10 +8,9 @@ use nom::{
     sequence::{preceded, terminated},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn thematic_break<'a>(
-    _state: Rc<MarkdownParserState>,
+    _state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, ()> {
     move |input: &str| {
         map(

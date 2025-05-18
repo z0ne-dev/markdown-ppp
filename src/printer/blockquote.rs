@@ -1,10 +1,9 @@
 use crate::ast::*;
 use crate::printer::ToDoc;
 use pretty::{Arena, DocAllocator, DocBuilder};
-use std::rc::Rc;
 
 pub(crate) fn blockquote_to_doc<'a>(
-    config: Rc<crate::printer::config::Config>,
+    config: crate::Xrc<crate::printer::config::Config>,
     arena: &'a Arena<'a>,
     inner: &[Block],
 ) -> DocBuilder<'a, Arena<'a>, ()> {

@@ -9,12 +9,11 @@ use nom::{
     sequence::{preceded, terminated},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 /// Parse headings in format:
 ///      ### Header text
 pub(crate) fn heading_v1<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Heading> {
     move |input: &'a str| {
         let to_space_or_not_to_space = if state.config.allow_no_space_in_headings {
@@ -45,7 +44,7 @@ pub(crate) fn heading_v1<'a>(
 ///      Heading text
 ///      ====
 pub(crate) fn heading_v2_or_paragraph<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Block> {
     move |input: &'a str| {
         let (input, (content, level)) = (
@@ -67,7 +66,7 @@ pub(crate) fn heading_v2_or_paragraph<'a>(
 }
 
 pub(crate) fn heading_v2_level<'a>(
-    _state: Rc<MarkdownParserState>,
+    _state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, SetextHeading> {
     move |input: &'a str| {
         let setext_parser = alt((

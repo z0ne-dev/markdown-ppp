@@ -9,10 +9,9 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn paragraph<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
     check_first_line: bool,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<Inline>> {
     move |input: &'a str| {
@@ -48,7 +47,7 @@ pub(crate) fn paragraph<'a>(
 }
 
 pub(crate) fn is_paragraph_line_start<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, ()> {
     move |input: &'a str| {
         peek(not(alt((

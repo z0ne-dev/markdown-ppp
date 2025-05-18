@@ -8,10 +8,9 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn text<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
         map(
@@ -32,11 +31,11 @@ pub(crate) fn text<'a>(
     }
 }
 
-fn is_text<'a>(state: Rc<MarkdownParserState>) -> impl FnMut(&'a str) -> IResult<&'a str, ()> {
+fn is_text<'a>(state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&'a str) -> IResult<&'a str, ()> {
     move |input: &'a str| not(not_a_text(state.clone())).parse(input)
 }
 
-fn not_a_text<'a>(state: Rc<MarkdownParserState>) -> impl FnMut(&'a str) -> IResult<&'a str, ()> {
+fn not_a_text<'a>(state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&'a str) -> IResult<&'a str, ()> {
     move |input: &'a str| {
         alt((
             conditional_inline_unit(

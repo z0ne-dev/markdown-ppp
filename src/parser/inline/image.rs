@@ -11,11 +11,10 @@ use nom::{
     sequence::{delimited, preceded},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 // ![alt text](/url "title")
 pub(crate) fn image<'a>(
-    _state: Rc<MarkdownParserState>,
+    _state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
         let (input, alt) = preceded(

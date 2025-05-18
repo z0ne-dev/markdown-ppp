@@ -2,7 +2,6 @@ use crate::ast::*;
 use crate::parser::config::{ElementBehavior, MarkdownParserConfig};
 use crate::parser::{parse_markdown, MarkdownParserState};
 use std::cell::RefCell;
-use std::rc::Rc;
 
 #[test]
 fn link_definition1() {
@@ -142,7 +141,7 @@ fn link_definition7() {
 #[test]
 fn link_definition_mapped1() {
     let config = MarkdownParserConfig::default().with_block_link_definition_behavior(
-        ElementBehavior::Map(Rc::new(RefCell::new(Box::new(|block| {
+        ElementBehavior::Map(crate::Xrc::new(RefCell::new(Box::new(|block| {
             if let Block::Definition(v) = block {
                 let mut label = vec![Inline::Text("mapped ".to_owned())];
                 label.extend(v.label);

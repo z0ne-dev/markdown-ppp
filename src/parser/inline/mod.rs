@@ -21,24 +21,23 @@ use nom::{
     multi::{many0, many1},
     IResult, Parser,
 };
-use std::rc::Rc;
 
 use super::util::conditional_inline;
 
 pub(crate) fn inline_many0<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<Inline>> {
     move |input: &'a str| many0(inline(state.clone())).parse(input)
 }
 
 pub(crate) fn inline_many1<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<Inline>> {
     move |input: &'a str| many1(inline(state.clone())).parse(input)
 }
 
 pub(crate) fn inline<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Inline> {
     move |input: &'a str| {
         alt((
@@ -91,7 +90,7 @@ pub(crate) fn inline<'a>(
     }
 }
 
-fn custom_parser(state: Rc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, Inline> {
+fn custom_parser(state: crate::Xrc<MarkdownParserState>) -> impl FnMut(&str) -> IResult<&str, Inline> {
     move |input: &str| {
         if let Some(custom_parser) = state.config.custom_inline_parser.as_ref() {
             let mut p = (**custom_parser).borrow_mut();

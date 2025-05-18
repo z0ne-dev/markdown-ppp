@@ -7,10 +7,9 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn blockquote<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<Block>> {
     move |input: &'a str| {
         let prefix = preceded(many_m_n(0, 3, char(' ')), char('>'));

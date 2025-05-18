@@ -10,10 +10,9 @@ use nom::{
     sequence::preceded,
     IResult, Parser,
 };
-use std::rc::Rc;
 
 pub(crate) fn code_block<'a>(
-    state: Rc<MarkdownParserState>,
+    state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, CodeBlock> {
     move |input: &'a str| {
         alt((
@@ -25,7 +24,7 @@ pub(crate) fn code_block<'a>(
 }
 
 pub(crate) fn code_block_indented<'a>(
-    _state: Rc<MarkdownParserState>,
+    _state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, CodeBlock> {
     move |input: &'a str| {
         let line_parser = preceded(
@@ -46,7 +45,7 @@ pub(crate) fn code_block_indented<'a>(
 }
 
 pub(crate) fn code_block_fenced<'a>(
-    _state: Rc<MarkdownParserState>,
+    _state: crate::Xrc<MarkdownParserState>,
 ) -> impl FnMut(&'a str) -> IResult<&'a str, CodeBlock> {
     move |input: &'a str| {
         let (input, space_prefix) = many_m_n(0, 3, char(' ')).parse(input)?;

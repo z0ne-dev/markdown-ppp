@@ -9,11 +9,10 @@ mod tests;
 
 use crate::ast::*;
 use pretty::{Arena, DocBuilder};
-use std::rc::Rc;
 
 /// Render Markdown AST to Markdown document.
 pub fn render_markdown(ast: &Document, config: crate::printer::config::Config) -> String {
-    let config = Rc::new(config);
+    let config = crate::Xrc::new(config);
     let arena = Arena::new();
     let doc = ast.to_doc(config.clone(), &arena);
 
@@ -25,7 +24,7 @@ pub fn render_markdown(ast: &Document, config: crate::printer::config::Config) -
 trait ToDoc<'a> {
     fn to_doc(
         &self,
-        config: Rc<crate::printer::config::Config>,
+        config: crate::Xrc<crate::printer::config::Config>,
         arena: &'a Arena<'a>,
     ) -> DocBuilder<'a, Arena<'a>, ()>;
 }
@@ -33,7 +32,7 @@ trait ToDoc<'a> {
 impl<'a> ToDoc<'a> for Document {
     fn to_doc(
         &self,
-        config: Rc<crate::printer::config::Config>,
+        config: crate::Xrc<crate::printer::config::Config>,
         arena: &'a Arena<'a>,
     ) -> DocBuilder<'a, Arena<'a>, ()> {
         self.blocks.to_doc(config, arena)
